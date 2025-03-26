@@ -6,7 +6,7 @@ export const useIsMdOrLarger = () => {
   const [isMdOrLarger, setIsMdOrLarger] = useState(false);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(min-width: 768px)');
+    const mediaQuery = window.matchMedia("(min-width: 768px)");
     setIsMdOrLarger(mediaQuery.matches);
 
     const handler = (e: any) => setIsMdOrLarger(e.matches);
@@ -22,7 +22,7 @@ export const useIsSmOrLarger = () => {
   const [isSmOrLarger, setIsSmOrLarger] = useState(false);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(min-width: 640px)');
+    const mediaQuery = window.matchMedia("(min-width: 640px)");
     setIsSmOrLarger(mediaQuery.matches);
 
     const handler = (e: any) => setIsSmOrLarger(e.matches);
