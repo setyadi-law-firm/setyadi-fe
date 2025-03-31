@@ -26,11 +26,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export function LoginModal() {
-  // const { data: session } = useSession();
-
-  const client = useSetyadiClient();
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const loginForm = useForm({
     resolver: zodResolver(loginSchema),
@@ -40,8 +41,30 @@ export function LoginModal() {
     },
   });
 
-  const onLogin = (data: z.infer<typeof loginSchema>) => {
-    toast.success("Masuk");
+  const onLogin = async (data: z.infer<typeof loginSchema>) => {
+    try {
+      setIsLoading(true);
+      const result = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        toast.error(result.error);
+        return;
+      }
+
+      if (result?.ok) {
+        toast.success("Login successful");
+        router.refresh();
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Failed to login. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -97,6 +120,7 @@ export function LoginModal() {
             <Button
               type="button"
               variant="default"
+              disabled={isLoading}
               onClick={() => {
                 loginForm.handleSubmit(
                   (data) => {
@@ -111,7 +135,7 @@ export function LoginModal() {
                 )();
               }}
             >
-              Sign In
+              {isLoading ? "Signing In..." : "Sign In"}
             </Button>
           </DialogFooter>
         </form>

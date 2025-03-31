@@ -1,85 +1,76 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, DefaultSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import axios from "axios";
+import { ENDPOINTS } from "@/components/core/environments/endpoints.environment";
+import { setyadiClient } from "../clients/setyadi-client";
 
-interface User {
-  id: string;
-  email: string;
-  accessToken: string;
-  refreshToken: string;
-  email_verified: boolean;
-}
-
+// Extend the built-in User type with our additional properties
 declare module "next-auth" {
+  interface User {
+    accessToken?: string;
+    refreshToken?: string;
+    message?: string;
+  }
+
   interface Session {
     user: {
-      id: string;
-      email: string;
-      accessToken: string;
-      refreshToken: string;
-      email_verified: boolean;
-    };
+      accessToken?: string;
+      refreshToken?: string;
+      email?: string;
+    } & DefaultSession["user"];
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    accessToken?: string;
+    refreshToken?: string;
+    email?: string;
   }
 }
 
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      id: "credentials",
-      name: "Credentials",
+      name: "credentials",
       credentials: {
-        uid: { label: "ID Token", type: "text" },
-        email: { label: "Email", type: "text" },
-        accessToken: { label: "Access Token", type: "text" },
-        refreshToken: { label: "Refresh Token", type: "text" },
-        tokenExpires: { label: "Token Expires", type: "text" },
-        email_verified: { label: "Email Verified", type: "text" },
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
-      async authorize(credentials): Promise<any> {
-        if (!credentials?.uid) return null;
-
-        try {
-          return {
-            id: credentials.uid,
-            email: credentials.email,
-            accessToken: credentials.accessToken,
-            refreshToken: credentials.refreshToken,
-            tokenExpires: new Date(credentials.tokenExpires).getTime(),
-            email_verified: credentials.email_verified,
-          };
-        } catch (error) {
-          console.error("Credential token verification failed:", error);
-          return null;
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Email and password are required");
         }
-      },
-    }),
-
-    CredentialsProvider({
-      id: "firebase",
-      name: "Firebase",
-      credentials: {
-        uid: { label: "ID Token", type: "text" },
-        email: { label: "Email", type: "text" },
-        accessToken: { label: "Access Token", type: "text" },
-        refreshToken: { label: "Refresh Token", type: "text" },
-        tokenExpires: { label: "Token Expires", type: "text" },
-        email_verified: { label: "Email Verified", type: "text" },
-      },
-      async authorize(credentials): Promise<any> {
-        if (!credentials?.uid) return null;
 
         try {
-          return {
-            id: credentials.uid,
+          const response = await setyadiClient.post(ENDPOINTS.LOGIN, {
             email: credentials.email,
-            accessToken: credentials.accessToken,
-            refreshToken: credentials.refreshToken,
-            tokenExpires: new Date(credentials.tokenExpires).getTime(),
-            email_verified: credentials.email_verified,
+            password: credentials.password,
+          });
+
+          const data = response.data;
+
+          if (!data || !data.accessToken) {
+            throw new Error("Invalid credentials");
+          }
+
+          // Return user object based on backend response
+          return {
+            // Use email as ID if no specific user ID is provided
+            id: credentials.email,
+            email: credentials.email,
+            accessToken: data.accessToken,
+            refreshToken: data.refreshToken,
+            // Add other properties you might need
+            message: data.message,
           };
-        } catch (error) {
-          console.error("Firebase token verification failed:", error);
-          return null;
+        } catch (error: any) {
+          console.error("Error during authentication:", error);
+          if (error.response) {
+            throw new Error(
+              error.response.data.message || "Authentication failed"
+            );
+          }
+          throw new Error("Authentication failed. Please try again.");
         }
       },
     }),
@@ -87,98 +78,27 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
-        token.email = user.email ?? "";
-        if ("accessToken" in user && user.accessToken) {
-          token.accessToken = user.accessToken;
-        }
-        if ("refreshToken" in user && user.refreshToken) {
-          token.refreshToken = user.refreshToken;
-        }
-        if ("tokenExpires" in user && user.tokenExpires) {
-          token.tokenExpires = user.tokenExpires;
-        }
-        if ("email_verified" in user && user.email_verified) {
-          token.email_verified = user.email_verified;
-        }
+        token.accessToken = user.accessToken;
+        token.refreshToken = user.refreshToken;
+        token.email = user.email || undefined;
       }
-
-      if (token.refreshToken) {
-        try {
-          const refreshedToken = await refreshAccessToken(token);
-          refreshedToken.email_verified = token.email_verified;
-          return refreshedToken;
-        } catch (error) {
-          console.error("Error refreshing token on request:", error);
-          return { ...token, error: "RefreshAccessTokenError" };
-        }
-      }
-
       return token;
     },
     async session({ session, token }) {
-      if (token) {
-        if (token.error === "RefreshAccessTokenError") {
-          return { ...session, error: "RefreshAccessTokenError" };
-        }
-
-        session.user = {
-          id: token.id as string,
-          email: token.email as string,
-          accessToken: token.accessToken as string,
-          refreshToken: token.refreshToken as string,
-          email_verified: token.email_verified as boolean,
-        };
+      if (session.user) {
+        session.user.accessToken = token.accessToken as string;
+        session.user.refreshToken = token.refreshToken as string;
+        session.user.email = token.email as string;
       }
       return session;
     },
   },
+  pages: {
+    signIn: "/login",
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 24 * 60 * 60, // 24 hours
+  },
   secret: process.env.NEXTAUTH_SECRET,
 };
-
-export async function refreshAccessToken(token: any) {
-  try {
-    if (!token.refreshToken) {
-      throw new Error("No refresh token available");
-    }
-
-    const apiKey = process.env.FIREBASE_API_KEY;
-    if (!apiKey) {
-      throw new Error("Firebase API key is missing");
-    }
-
-    const url = `https://securetoken.googleapis.com/v1/token?key=${apiKey}`;
-    const response = await axios.post(
-      url,
-      new URLSearchParams({
-        grant_type: "refresh_token",
-        refresh_token: token.refreshToken,
-      }),
-      {
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      }
-    );
-
-    const refreshedTokens = response.data;
-
-    if (!refreshedTokens || !refreshedTokens.id_token) {
-      throw new Error("Failed to refresh access token");
-    }
-
-    return {
-      ...token,
-      accessToken: refreshedTokens.id_token,
-      refreshToken: refreshedTokens.refresh_token || token.refreshToken,
-      tokenExpires: Date.now() + Number(refreshedTokens.expires_in) * 1000,
-      email_verified: refreshedTokens.email_verified,
-    };
-  } catch (error) {
-    console.error("Error refreshing token:", error);
-    return {
-      ...token,
-      error: "RefreshAccessTokenError",
-    };
-  }
-}
-
-export default NextAuth(authOptions);
