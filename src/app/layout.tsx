@@ -4,6 +4,7 @@ import { IsLoadedProvider, QueryProvider } from "@/components";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { cn } from "@/lib";
 import { SessionProviders } from "@/components";
+import { Toaster } from '@/components/ui/sonner';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -30,7 +31,10 @@ export default function RootLayout({
       >
         <IsLoadedProvider>
           <QueryProvider>
-            <SessionProviders>{children}</SessionProviders>
+            <SessionProviders>
+              {children}
+              <Toaster />
+            </SessionProviders>
           </QueryProvider>
         </IsLoadedProvider>
       </body>

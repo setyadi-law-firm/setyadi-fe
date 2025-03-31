@@ -15,11 +15,20 @@ import { useSetyadiClient } from "@/components/core/bases/hooks/use-setyadi-clie
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "./schema";
-import { Form, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { z } from "zod";
+import { toast } from "sonner";
 
 export function LoginModal() {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
 
   const client = useSetyadiClient();
 
@@ -31,8 +40,12 @@ export function LoginModal() {
     },
   });
 
+  const onLogin = (data: z.infer<typeof loginSchema>) => {
+    toast.success("Masuk");
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full gap-2 text-center">
+    <div className="flex flex-col items-center justify-center w-full h-full gap-2">
       <DialogTitle className="text-2xl font-semibold text-[#393938]">
         Sign in as Admin
       </DialogTitle>
@@ -47,14 +60,17 @@ export function LoginModal() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Email</FormLabel>
-                <Input
-                  {...field}
-                  type="email"
-                  placeholder="Email"
-                  className="w-full"
-                  autoComplete="email"
-                  autoFocus
-                />
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="email"
+                    placeholder="Email"
+                    className="w-full"
+                    autoComplete="email"
+                    autoFocus
+                  />
+                </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -64,28 +80,35 @@ export function LoginModal() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Password</FormLabel>
-                <Input
-                  {...field}
-                  type="password"
-                  placeholder="*******"
-                  className="w-full"
-                  autoComplete="current-password"
-                />
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="password"
+                    placeholder="*******"
+                    className="w-full"
+                    autoComplete="current-password"
+                  />
+                </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
           <DialogFooter>
             <Button
-              type="submit"
+              type="button"
               variant="default"
-              onClick={async (e) => {
-                e.preventDefault();
-                const { email, password } = loginForm.getValues();
-                await signIn("credentials", {
-                  email,
-                  password,
-                  redirect: false,
-                });
+              onClick={() => {
+                loginForm.handleSubmit(
+                  (data) => {
+                    onLogin(data);
+                  },
+                  (errors) => {
+                    toast.error(
+                      "Please fix validation errors before proceeding"
+                    );
+                    console.error("Form validation errors:", errors);
+                  }
+                )();
               }}
             >
               Sign In
