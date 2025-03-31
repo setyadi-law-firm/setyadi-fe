@@ -10,8 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { signIn, useSession } from "next-auth/react";
-import { useSetyadiClient } from "@/components/core/bases/hooks/use-setyadi-client";
+import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "./schema";
@@ -19,10 +18,6 @@ import { Form, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
 export function LoginModal() {
-  const { data: session } = useSession();
-
-  const client = useSetyadiClient();
-
   const loginForm = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
