@@ -1,16 +1,21 @@
 "use client";
 
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { NavLink } from "./navLink";
 import { LINKS } from "../constants";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Assets, LoginModal } from "@/components";
+import { signOut, useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
 
 export const DesktopNavbar = () => {
   const [isScrolledPastScreenHeight, setIsScrolledPastScreenHeight] =
     useState(false);
+
+  const { data: session } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,6 +33,11 @@ export const DesktopNavbar = () => {
   }, []);
 
   const pathname = usePathname();
+
+  const handleSignOut = async () => {
+    await signOut({ redirect: false });
+    router.refresh();
+  };
 
   return (
     <nav
@@ -53,20 +63,26 @@ export const DesktopNavbar = () => {
             </span>
           </NavLink>
         ))}
-        <Dialog>
-          <DialogTrigger asChild>
-            <Image
-              src={Assets.userIcon}
-              alt="User Icon"
-              width={24}
-              height={24}
-              className={`transition-all duration-1000 cursor-pointer`}
-            />
-          </DialogTrigger>
-          <DialogContent className="px-5 font-plus-jakarta max-h-[90vh] overflow-y-auto contain-content modal-content">
-            <LoginModal />
-          </DialogContent>
-        </Dialog>
+        {session?.user ? (
+          <Button type="button" variant="destructive" onClick={handleSignOut}>
+            Logout
+          </Button>
+        ) : (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Image
+                src={Assets.userIcon}
+                alt="User Icon"
+                width={24}
+                height={24}
+                className={`transition-all duration-1000 cursor-pointer`}
+              />
+            </DialogTrigger>
+            <DialogContent className="px-5 font-plus-jakarta max-h-[90vh] overflow-y-auto contain-content modal-content">
+              <LoginModal />
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
     </nav>
   );
