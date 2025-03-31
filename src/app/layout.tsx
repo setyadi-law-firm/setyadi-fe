@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { IsLoadedProvider } from "@/components";
+import { IsLoadedProvider, QueryProvider } from "@/components";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { cn } from "@/lib";
+import { SessionProviders } from "@/components";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -27,7 +28,11 @@ export default function RootLayout({
           plusJakartaSans.variable
         )}
       >
-        <IsLoadedProvider>{children}</IsLoadedProvider>
+        <IsLoadedProvider>
+          <QueryProvider>
+            <SessionProviders>{children}</SessionProviders>
+          </QueryProvider>
+        </IsLoadedProvider>
       </body>
     </html>
   );

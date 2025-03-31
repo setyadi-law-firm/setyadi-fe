@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { NavLink } from "./navLink";
 import { LINKS } from "../constants";
-import { Assets } from "@/components/core/constants";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Assets, LoginModal } from "@/components";
 
 export const DesktopNavbar = () => {
   const [isScrolledPastScreenHeight, setIsScrolledPastScreenHeight] =
@@ -53,17 +53,20 @@ export const DesktopNavbar = () => {
             </span>
           </NavLink>
         ))}
-        <div>
-          <Image
-            src={Assets.userIcon}
-            alt="User Icon"
-            width={24}
-            height={24}
-            className={`transition-all duration-1000 ${
-              isScrolledPastScreenHeight ? "" : "invert"
-            }`}
-          />
-        </div>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Image
+              src={Assets.userIcon}
+              alt="User Icon"
+              width={24}
+              height={24}
+              className={`transition-all duration-1000 cursor-pointer`}
+            />
+          </DialogTrigger>
+          <DialogContent className="px-5 font-plus-jakarta max-h-[90vh] overflow-y-auto contain-content modal-content">
+            <LoginModal />
+          </DialogContent>
+        </Dialog>
       </div>
     </nav>
   );
