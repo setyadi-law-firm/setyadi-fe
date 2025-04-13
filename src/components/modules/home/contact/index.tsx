@@ -13,7 +13,7 @@ export function ContactSection() {
           alt="Hero Contact Image"
           src={Assets.homeContactBg}
           className={cn(
-            "object-cover pointer-events-none object-left -z-10 brightness-[40%] grayscale select-none drag-none"
+            "object-cover pointer-events-none object-center -z-10 brightness-[40%] grayscale select-none drag-none"
           )}
         />
       </div>

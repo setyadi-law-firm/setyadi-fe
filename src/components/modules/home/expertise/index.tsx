@@ -18,7 +18,7 @@ export function ExpertiseSection() {
         business needs. Our team of experts has extensive experience across
         various areas of law, including:
       </p>
-      <div className="flex flex-wrap w-fit items-center justify-center gap-4 mt-10">
+      <div className="flex flex-wrap w-fit items-center justify-center gap-4 md:mt-10 mt-4">
         {EXPERTISES.map((expertise, index) => (
           <div
             key={index}
