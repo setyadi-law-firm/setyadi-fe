@@ -32,8 +32,13 @@ export function InsightSection() {
       <h1 className="md:text-3xl text-2xl font-bold">Insight</h1>
       <div className="grid md:grid-cols-3 grid-cols-1 gap-x-8 gap-y-8">
         {INSIGHTS.map((insight, index) => (
-          <div key={index} className="flex flex-col justify-between gap-4 relative aspect-[3/2] px-4 py-6">
-            <h2 className="text-xl font-semibold text-neutral-50 z-20">{insight.title}</h2>
+          <div
+            key={index}
+            className="flex flex-col justify-between gap-4 relative aspect-[3/2] px-4 py-6"
+          >
+            <h2 className="text-xl font-semibold text-neutral-50 z-20">
+              {insight.title}
+            </h2>
             <Image
               src={insight.imageUrl}
               alt={insight.title}
@@ -50,8 +55,13 @@ export function InsightSection() {
       <h1 className="md:text-3xl text-2xl font-bold mt-4">Latest News</h1>
       <div className="grid md:grid-cols-3 grid-cols-1 gap-x-8 gap-y-8">
         {INSIGHTS.map((insight, index) => (
-          <div key={index} className="flex flex-col justify-between gap-4 relative aspect-[3/2] px-4 py-6">
-            <h2 className="text-xl font-semibold text-neutral-50 z-20">{insight.title}</h2>
+          <div
+            key={index}
+            className="flex flex-col justify-between gap-4 relative aspect-[3/2] px-4 py-6"
+          >
+            <h2 className="text-xl font-semibold text-neutral-50 z-20">
+              {insight.title}
+            </h2>
             <Image
               src={insight.imageUrl}
               alt={insight.title}

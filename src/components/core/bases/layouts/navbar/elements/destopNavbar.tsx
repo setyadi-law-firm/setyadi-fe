@@ -43,7 +43,7 @@ export const DesktopNavbar = () => {
     <nav
       className={`sticky h-16 w-full flex items-center px-10 py-3 gap-4 justify-between transition-all duration-1000 z-50 -mb-20 overflow-x-clip left-4 right-0 scale-95 rounded-2xl ${
         isScrolledPastScreenHeight
-          ? "top-4 absolute bg-white bg-opacity-0"
+          ? "top-4 fixed bg-white bg-opacity-0"
           : "mt-4 -top-36 bg-white bg-opacity-0"
       }`}
     >
@@ -63,26 +63,6 @@ export const DesktopNavbar = () => {
             </span>
           </NavLink>
         ))}
-        {session?.user ? (
-          <Button type="button" variant="destructive" onClick={handleSignOut}>
-            Logout
-          </Button>
-        ) : (
-          <Dialog>
-            <DialogTrigger asChild>
-              <Image
-                src={Assets.userIcon}
-                alt="User Icon"
-                width={24}
-                height={24}
-                className={`transition-all duration-1000 cursor-pointer`}
-              />
-            </DialogTrigger>
-            <DialogContent className="px-5 font-plus-jakarta max-h-[90vh] overflow-y-auto contain-content modal-content">
-              <LoginModal />
-            </DialogContent>
-          </Dialog>
-        )}
       </div>
     </nav>
   );
