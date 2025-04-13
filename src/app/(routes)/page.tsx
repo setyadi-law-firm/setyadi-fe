@@ -1,7 +1,7 @@
 'use client';
 
-import { HomeModule } from '@/components';
+import { HomePageModule } from '@/components';
 
 export default function HomePage() {
-  return <HomeModule />;
+  return <HomePageModule />;
 }
