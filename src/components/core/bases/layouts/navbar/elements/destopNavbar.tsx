@@ -47,7 +47,13 @@ export const DesktopNavbar = () => {
           : "mt-4 -top-36 bg-white bg-opacity-0"
       }`}
     >
-      <div className="text-neutral-950">Logo</div>
+      <Image
+        src={Assets.logo}
+        alt="Logo"
+        width={100}
+        height={100}
+        className=""
+      />
       <div className="flex w-fit items-center relative gap-10">
         {Object.values(LINKS).map((link) => (
           <NavLink

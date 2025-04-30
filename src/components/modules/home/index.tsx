@@ -1,6 +1,3 @@
-import { Assets } from "@/components/core";
-import { cn } from "@/lib";
-import Image from "next/image";
 import { HeroSection } from "./hero";
 import { AboutSection } from "./about";
 import { ContactSection } from "./contact";

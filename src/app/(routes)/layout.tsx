@@ -1,8 +1,26 @@
 "use client";
 
-import { Navbar } from "@/components";
-import { useIsLoaded } from "@/components";
+import { Assets, Navbar, useIsLoaded } from "@/components";
 import { cn } from "@/lib";
+import Image from "next/image";
+
+const LoadingComponent = () => {
+  return (
+    <div
+      className={cn(
+        "w-full h-screen flex justify-center items-center z-[110] transition-all duration-1000 ease-in-out"
+      )}
+    >
+      <Image
+        src={Assets.logo}
+        alt="Logo"
+        width={200}
+        height={200}
+        className=""
+      />
+    </div>
+  );
+};
 
 export default function RootLayout({
   children,
@@ -10,24 +28,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const { isLoaded } = useIsLoaded();
-  const LoadingComponent = () => {
-    return (
-      <div
-        className={cn(
-          "w-full h-screen flex justify-center items-center z-[110] transition-all duration-1000 ease-in-out"
-        )}
-      >
-        {/* <Image
-          src={Assets.logoBlack}
-          alt="Logo"
-          width={100}
-          height={100}
-          className=""
-        /> */}
-        <div className="aspect-square w-32 h-32 bg-red-500">Ini logo Ges</div>
-      </div>
-    );
-  };
 
   return (
     <div

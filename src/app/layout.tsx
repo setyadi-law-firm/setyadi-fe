@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { IsLoadedProvider, QueryProvider } from "@/components";
+import {
+  IsLoadedProvider,
+  QueryProvider,
+  SessionProviders,
+} from "@/components";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { cn } from "@/lib";
-import { SessionProviders } from "@/components";
-import { Toaster } from '@/components/ui/sonner';
+import { Toaster } from "@/components/ui/sonner";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
