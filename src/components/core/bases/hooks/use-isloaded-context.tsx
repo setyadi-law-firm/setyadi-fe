@@ -19,15 +19,13 @@ export const IsLoadedProvider: React.FC<{ children: React.ReactNode }> = ({
   const pathname = usePathname();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 1000);
-
-    return () => clearTimeout(timer);
+    setIsLoaded(true);
   }, [pathname]);
 
+  const value = React.useMemo(() => ({ isLoaded, setIsLoaded }), [isLoaded]);
+
   return (
-    <IsLoadedContext.Provider value={{ isLoaded, setIsLoaded }}>
+    <IsLoadedContext.Provider value={value}>
       {children}
     </IsLoadedContext.Provider>
   );

@@ -24,9 +24,9 @@ const LoadingComponent = () => {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   const { isLoaded } = useIsLoaded();
 
   return (
