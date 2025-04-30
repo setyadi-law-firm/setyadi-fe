@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 
 export function VisionSection() {
   return (
-    <div className="items-center w-full z-0 relative flex py-20 px-20 justify-items-center gap-16">
+    <div className="items-center w-full z-0 relative flex max-md:flex-col max-md:px-12 max-md:py-12 px-16 py-18 justify-items-center gap-16">
       <div className="md:w-2/3 flex flex-col">
         <h3 className="text-xl text-[#1059BD] font-semibold mb-8">
           Trusted Lawyers with a Vision for Excellence
