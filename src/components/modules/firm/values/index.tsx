@@ -10,7 +10,7 @@ export function ValuesSection() {
         {FIRM_VALUES.map((value, index) => (
           <div
             key={index}
-            className="flex flex-col gap-4 bg-[#F5F5F5] p-6 rounded-lg shadow-md w-full md:w-64 shrink-0 pb-32"
+            className="flex flex-col gap-4 bg-[#F5F5F5] p-6 rounded-lg shadow-md w-full md:w-64 shrink-0 md:aspect-[3/4] aspect-[4/3]"
           >
             <div className="text-[#1059BD] font-semibold text-2xl">
               {value.header}

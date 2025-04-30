@@ -17,7 +17,7 @@ export function HeroSection() {
           )}
         />
       </div>
-      <div className="min-h-screen w-full text-neutral-50 gap-7 flex flex-col justify-between md:px-20 px-8 pb-20 pt-32 z-10">
+      <div className="min-h-screen w-full text-neutral-50 gap-7 flex flex-col justify-between md:px-20 px-8 pb-20 md:pt-32 pt-20 z-10">
         <div className="border-l-4 py-3 pl-6 border-[#1059BD] text-neutral-50 font-semibold text-2xl md:text-2xl">
           Firm
         </div>
