@@ -19,7 +19,7 @@ export const TeamMemberCard = ({
 }: TeamMemberCardProps) => {
   return (
     <div className="flex max-md:flex-col md:h-72 gap-x-8 w-full p-4">
-      <div className="relative rounded-sm shrink-0 aspect-[3/4] bg-red-500 h-full mb-4 overflow-clip shadow-lg max-md:w-2/3">
+      <div className="relative rounded-sm shrink-0 aspect-[3/4] h-full mb-4 overflow-clip shadow-lg max-md:w-2/3">
         <Image
           src={imageUrl}
           alt={name}
