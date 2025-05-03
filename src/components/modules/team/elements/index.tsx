@@ -37,7 +37,7 @@ export const TeamMemberCard = ({
             {role}
           </span>
           <Button
-            variant={"ghost"}
+            variant={"link"}
             className="md:text-base text-lg flex items-center gap-2 text-[#777675] w-fit"
             onClick={() => {
               window.open(`mailto:${email}`, "_blank");
