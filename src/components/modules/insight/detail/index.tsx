@@ -19,15 +19,15 @@ export function InsightDetailPageModule() {
     subtitle: "Article Subtitle",
     imageUrl: Assets.insight1,
     uploadDate: "2023-10-01",
-    content: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum tempor hendrerit. Aliquam nec fermentum felis, nec malesuada erat. Praesent et auctor tellus. Vivamus pulvinar dolor diam, at tempor turpis pellentesque vel. Nulla aliquam risus vitae quam luctus iaculis. Nullam interdum, leo a volutpat pellentesque, tellus diam pretium metus, non laoreet augue felis sit amet sapien. Sed rhoncus magna sit amet mauris viverra, ac blandit ante commodo. Praesent consequat pulvinar arcu porttitor bibendum. Suspendisse ut consequat purus. Nulla a dui ut tellus consectetur dictum. Integer dapibus ligula eu lacus fringilla vestibulum. Donec vehicula elit sed facilisis luctus.
+    content: `                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum tempor hendrerit. Aliquam nec fermentum felis, nec malesuada erat. Praesent et auctor tellus. Vivamus pulvinar dolor diam, at tempor turpis pellentesque vel. Nulla aliquam risus vitae quam luctus iaculis. Nullam interdum, leo a volutpat pellentesque, tellus diam pretium metus, non laoreet augue felis sit amet sapien. Sed rhoncus magna sit amet mauris viverra, ac blandit ante commodo. Praesent consequat pulvinar arcu porttitor bibendum. Suspendisse ut consequat purus. Nulla a dui ut tellus consectetur dictum. Integer dapibus ligula eu lacus fringilla vestibulum. Donec vehicula elit sed facilisis luctus.
 
-Nunc vulputate faucibus magna, vel dignissim sem. Morbi iaculis auctor nulla quis porta. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Suspendisse non neque mattis, semper augue eu, hendrerit lectus. Quisque vel ullamcorper metus, et ultrices nunc. Phasellus aliquet risus at magna ultrices, quis maximus nisl molestie. Ut condimentum vitae odio ac ultricies. Nam nibh enim, blandit id auctor nec, mattis id quam. Quisque eget augue lobortis, vehicula quam in, pulvinar massa. Sed nec enim eros. Praesent semper metus vel dolor pharetra, nec ultricies massa molestie.
+                Nunc vulputate faucibus magna, vel dignissim sem. Morbi iaculis auctor nulla quis porta. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Suspendisse non neque mattis, semper augue eu, hendrerit lectus. Quisque vel ullamcorper metus, et ultrices nunc. Phasellus aliquet risus at magna ultrices, quis maximus nisl molestie. Ut condimentum vitae odio ac ultricies. Nam nibh enim, blandit id auctor nec, mattis id quam. Quisque eget augue lobortis, vehicula quam in, pulvinar massa. Sed nec enim eros. Praesent semper metus vel dolor pharetra, nec ultricies massa molestie.
 
-Sed ligula nulla, placerat quis tellus eget, congue condimentum turpis. Donec nec sem in ex porttitor feugiat. Nullam euismod elit nec nibh iaculis tristique. Aliquam erat volutpat. Vestibulum efficitur volutpat malesuada. Praesent at cursus libero, scelerisque venenatis purus. Cras vitae nibh urna. Aliquam ac leo cursus, sollicitudin purus et, porttitor sapien. Nunc dignissim viverra ullamcorper. Praesent eu maximus mi. Duis at orci facilisis, porttitor mauris vulputate, lacinia diam. Pellentesque in lacinia quam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras feugiat enim ac porta tempor. Etiam et augue turpis. Nullam tempor accumsan diam, et dictum mi commodo ut.
+                Sed ligula nulla, placerat quis tellus eget, congue condimentum turpis. Donec nec sem in ex porttitor feugiat. Nullam euismod elit nec nibh iaculis tristique. Aliquam erat volutpat. Vestibulum efficitur volutpat malesuada. Praesent at cursus libero, scelerisque venenatis purus. Cras vitae nibh urna. Aliquam ac leo cursus, sollicitudin purus et, porttitor sapien. Nunc dignissim viverra ullamcorper. Praesent eu maximus mi. Duis at orci facilisis, porttitor mauris vulputate, lacinia diam. Pellentesque in lacinia quam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras feugiat enim ac porta tempor. Etiam et augue turpis. Nullam tempor accumsan diam, et dictum mi commodo ut.
 
-Curabitur at diam vitae odio bibendum luctus quis vestibulum erat. Donec malesuada tincidunt justo, in pretium justo varius at. Vestibulum tincidunt ex a venenatis volutpat. Etiam sed iaculis mauris. Etiam suscipit porta ipsum, eget suscipit lectus pulvinar vel. Donec et tempor ligula, ultricies pretium nisi. Aenean cursus efficitur felis at egestas. Sed facilisis fringilla tortor ac pulvinar. Nunc pretium vulputate ipsum a euismod. Integer suscipit convallis euismod. Sed nec pharetra ligula.
+                Curabitur at diam vitae odio bibendum luctus quis vestibulum erat. Donec malesuada tincidunt justo, in pretium justo varius at. Vestibulum tincidunt ex a venenatis volutpat. Etiam sed iaculis mauris. Etiam suscipit porta ipsum, eget suscipit lectus pulvinar vel. Donec et tempor ligula, ultricies pretium nisi. Aenean cursus efficitur felis at egestas. Sed facilisis fringilla tortor ac pulvinar. Nunc pretium vulputate ipsum a euismod. Integer suscipit convallis euismod. Sed nec pharetra ligula.
 
-Aenean ut magna est. Donec vitae ipsum tortor. Praesent facilisis eu metus vel dignissim. Curabitur malesuada fermentum pulvinar. Maecenas pulvinar arcu mi, id auctor arcu sagittis sit amet. Aenean faucibus enim id nulla luctus, posuere varius orci fermentum. Sed mollis ullamcorper blandit. Nulla non diam condimentum, porttitor sem nec, molestie lorem. Phasellus lacinia purus in ante finibus ullamcorper.`,
+                Aenean ut magna est. Donec vitae ipsum tortor. Praesent facilisis eu metus vel dignissim. Curabitur malesuada fermentum pulvinar. Maecenas pulvinar arcu mi, id auctor arcu sagittis sit amet. Aenean faucibus enim id nulla luctus, posuere varius orci fermentum. Sed mollis ullamcorper blandit. Nulla non diam condimentum, porttitor sem nec, molestie lorem. Phasellus lacinia purus in ante finibus ullamcorper.`,
   };
 
   return (
@@ -74,13 +74,7 @@ Aenean ut magna est. Donec vitae ipsum tortor. Praesent facilisis eu metus vel d
         </div>
 
         {/* Content */}
-        <div className="prose max-w-none">
-          {DUMMY_ARTICLE.content.split("\n\n").map((paragraph, idx) => (
-            <p key={idx} className="mb-4 text-gray-700 leading-relaxed">
-              {paragraph}
-            </p>
-          ))}
-        </div>
+        <div className="prose max-w-none mb-4 text-gray-700 leading-relaxed whitespace-pre-wrap">{DUMMY_ARTICLE.content}</div>
       </div>
     </div>
   );
