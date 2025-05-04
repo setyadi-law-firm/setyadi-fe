@@ -4,4 +4,5 @@ export class Assets {
   static readonly homeContactBg = "/images/home-contact-bg.jpeg";
   static readonly insight1 = "/images/insight-1.webp";
   static readonly logo = "/images/logo.svg";
+  static readonly logoWhite = "/images/logo-white.svg";
 }

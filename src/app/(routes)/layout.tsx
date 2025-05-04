@@ -1,6 +1,6 @@
 "use client";
 
-import { Assets, Navbar, useIsLoaded } from "@/components";
+import { Assets, Footer, Navbar, useIsLoaded } from "@/components";
 import { cn } from "@/lib";
 import Image from "next/image";
 
@@ -44,7 +44,7 @@ export default function RootLayout({
       </div>
       <Navbar />
       <main className="w-full">{children}</main>
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 }
