@@ -1,7 +1,7 @@
 "use client";
 
 import { Assets } from "@/components/core/constants";
-import { LocateIcon, Mail, MapPin, Phone, PhoneCall } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
 
 export const Footer = () => {
@@ -24,12 +24,16 @@ export const Footer = () => {
         <div className="flex max-md:flex-col gap-y-8 gap-x-6">
           <div className="flex gap-3">
             <Mail size={20} className="text-white" />
-            <p className="text-sm max-md:text-xs text-white">setyadi@gmail.com</p>
+            <p className="text-sm max-md:text-xs text-white">
+              setyadi@gmail.com
+            </p>
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex gap-3">
               <MapPin size={20} className="text-white" />
-              <p className="text-sm max-md:text-xs text-white">Jl. Alamat Kantor</p>
+              <p className="text-sm max-md:text-xs text-white">
+                Jl. Alamat Kantor
+              </p>
             </div>
             <div className="flex gap-3">
               <Phone size={20} className="text-white" />
@@ -37,7 +41,9 @@ export const Footer = () => {
             </div>
             <div className="flex gap-3">
               <Mail size={20} className="text-white" />
-              <p className="text-sm max-md:text-xs text-white">setyadi@gmail.com</p>
+              <p className="text-sm max-md:text-xs text-white">
+                setyadi@gmail.com
+              </p>
             </div>
           </div>
         </div>
