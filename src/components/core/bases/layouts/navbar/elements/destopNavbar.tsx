@@ -7,7 +7,6 @@ import { NavLink } from "./navLink";
 import { LINKS } from "../constants";
 import { Assets } from "@/components";
 import { signOut, useSession } from "next-auth/react";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
