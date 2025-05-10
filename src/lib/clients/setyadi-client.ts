@@ -1,5 +1,4 @@
 import axios from "axios";
-import { ENDPOINTS } from "@/components/core/environments/endpoints.environment";
 
 export const setyadiClient = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_BASE_URL}/setyadi-api`,

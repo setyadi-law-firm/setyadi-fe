@@ -8,6 +8,7 @@ import Underline from "@tiptap/extension-underline";
 import { useState, useRef, useEffect } from "react";
 import DOMPurify from "isomorphic-dompurify";
 import "@/components/core/styles/article-content.css";
+import { toast } from "sonner";
 
 // Shadcn UI components
 import { Button } from "@/components/ui/button";
@@ -36,12 +37,14 @@ import {
   Save,
   Image as ImageIcon,
 } from "lucide-react";
+import { useSetyadiClient } from "@/components/core";
 
 export function InsightEditPageModule() {
   const { id } = useParams<{
     id: string;
   }>();
   const router = useRouter();
+  const setyadiClient = useSetyadiClient();
 
   const [title, setTitle] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
@@ -133,82 +136,98 @@ export function InsightEditPageModule() {
       router.back();
     }
   };
+  const handleSave = async () => {
+    try {
+      // Sanitize the HTML content before sending to server
+      const sanitizedContent = DOMPurify.sanitize(editorContent);
 
-  const handleSave = () => {
-    // Sanitize the HTML content before sending to server
-    const sanitizedContent = DOMPurify.sanitize(editorContent);
+      // Format date properly
+      const formattedDate = `${date.year}-${date.month.padStart(
+        2,
+        "0"
+      )}-${date.day.padStart(2, "0")}`;
 
-    // Prepare the data to send to backend
-    const articleData = {
-      title,
-      author,
-      date: `${date.year}-${date.month}-${date.day}`,
-      content: sanitizedContent, // Sanitized HTML content
-      contentJSON: editorJSON, // JSON structure for future editing
-      mainImage, // You might want to upload this separately and store a URL
-    };
+      // Prepare the data to send to backend
+      const articleData = {
+        title,
+        author,
+        date: formattedDate,
+        content: sanitizedContent, // Sanitized HTML content
+        contentJSON: editorJSON, // JSON structure for future editing
+        mainImage, // You might want to upload this separately and store a URL
+      };
 
-    // Here you would make an API call to save the data
-    console.log("Saving article data:", articleData);
-
-    setShowSaveDialog(true);
-    // After successful save:
-    // setHasUnsavedChanges(false);
+      // Show the confirmation dialog before saving
+      setShowSaveDialog(true);
+    } catch (error) {
+      console.error("Error preparing article data:", error);
+      toast.error("Error preparing article data");
+    }
   };
 
   const confirmDiscard = () => {
     setShowUnsavedDialog(false);
     router.back();
   };
+  const confirmSave = async () => {
+    try {
+      // Sanitize the HTML content before sending to server
+      const sanitizedContent = DOMPurify.sanitize(editorContent);
 
-  const confirmSave = () => {
-    // Save implementation
-    setHasUnsavedChanges(false);
-    setShowSaveDialog(false);
-    router.back();
+      // Format date properly
+      const formattedDate = `${date.year}-${date.month.padStart(
+        2,
+        "0"
+      )}-${date.day.padStart(2, "0")}`;
+
+      // Prepare the data to send to backend
+      const articleData = {
+        title,
+        author,
+        date: formattedDate,
+        content: sanitizedContent,
+        contentJSON: editorJSON,
+        mainImage,
+      };
+
+      // Use setyadiClient to post the data
+      const endpoint = id ? `/insights/${id}` : "/insights";
+      const method = id ? "put" : "post";
+
+      const response = await setyadiClient[method](endpoint, articleData);
+
+      toast.success(`Article ${id ? "updated" : "created"} successfully`);
+      setHasUnsavedChanges(false);
+      setShowSaveDialog(false);
+
+      // Redirect to the insights list or the detail page
+      if (id) {
+        router.push(`/insights/${id}`);
+      } else if (response.data?.id) {
+        router.push(`/insights/${response.data.id}`);
+      } else {
+        router.push("/insights");
+      }
+    } catch (error) {
+      console.error("Error saving article:", error);
+      toast.error(
+        `Failed to ${id ? "update" : "create"} article. Please try again.`
+      );
+      setShowSaveDialog(false);
+    }
   };
-
   // Function to initialize editor with existing content (for edit mode)
   const loadExistingContent = async (articleId: string) => {
     try {
-      // Example API call - replace with your actual data fetching
-      // const response = await fetch(`/api/articles/${articleId}`);
-      // const article = await response.json();
+      // Fetch article data from the API
+      const response = await setyadiClient.get(`/insights/${articleId}`);
+      const article = response.data;
 
-      // For demo purposes with rich formatting example:
-      const article = {
-        title: "Example Rich Text Article",
-        author: "John Doe",
-        date: "2023-05-15",
-        content: `
-          <h2>Sample Article with Rich Formatting</h2>
-          <p>This is a <strong>bold text example</strong> in a paragraph.</p>
-          <p>Here we have some <em>italic text</em> for emphasis.</p>
-          <p>And this text has <u>underline formatting</u> applied to it.</p>
-          
-          <h3>List Example</h3>
-          <ul>
-            <li>First bullet point item</li>
-            <li>Second bullet point with <strong>bold text</strong></li>
-            <li>Third bullet point with <em>italics</em></li>
-          </ul>
-          
-          <p>Below is an example image:</p>
-          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiB2aWV3Qm94PSIwIDAgMjAwIDIwMCI+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNjY2NjY2MiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSIxOCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgYWxpZ25tZW50LWJhc2VsaW5lPSJtaWRkbGUiIGZpbGw9IiM2NjY2NjYiPnNhbXBsZSBpbWFnZTwvdGV4dD48L3N2Zz4=" alt="Sample image" />
-          
-          <p>And then some more text after the image.</p>
-          
-          <h3>Numbered List</h3>
-          <ol>
-            <li>First ordered item</li>
-            <li>Second ordered item with <u>underlined text</u></li>
-            <li>Third ordered item with <strong><em>bold and italic</em></strong> text</li>
-          </ol>
-          
-          <p>This is how your content would look when retrieved from the backend.</p>
-        `,
-        // You can also include contentJSON if you're storing the JSON structure
-      };
+      // If no data is returned, use a fallback
+      if (!article) {
+        toast.error("Failed to load article data");
+        return;
+      }
 
       setTitle(article.title);
       setAuthor(article.author);
