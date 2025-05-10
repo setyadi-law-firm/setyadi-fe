@@ -40,7 +40,6 @@ export function InsightDetailPageModule() {
                 Aenean ut magna est. Donec vitae ipsum tortor. Praesent facilisis eu metus vel dignissim. Curabitur malesuada fermentum pulvinar. Maecenas pulvinar arcu mi, id auctor arcu sagittis sit amet. Aenean faucibus enim id nulla luctus, posuere varius orci fermentum. Sed mollis ullamcorper blandit. Nulla non diam condimentum, porttitor sem nec, molestie lorem. Phasellus lacinia purus in ante finibus ullamcorper.`,
   };
 
-  const [isEditing, setIsEditing] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   const handleDelete = () => {
@@ -105,7 +104,7 @@ export function InsightDetailPageModule() {
             <Button
               variant="default"
               className="w-fit"
-              onClick={() => setIsEditing(true)}
+              onClick={() => router.push(`/insights/${id}/edit/`)}
             >
               <Edit size={16} className="mr-2" />
               Edit
