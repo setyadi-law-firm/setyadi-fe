@@ -8,12 +8,21 @@ import Image from "next/image";
 import { Assets } from "@/components/core";
 import { useState } from "react";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 export function InsightPageModule() {
   const { data: session } = useSession();
   const [isBulking, setIsBulking] = useState(false);
   const [selectedArticles, setSelectedArticles] = useState<string[]>([]);
   const [articles, setArticles] = useState(DUMMY_ARTICLES);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   const handleSelect = (id: string) => {
     setSelectedArticles((prev) =>
@@ -23,13 +32,15 @@ export function InsightPageModule() {
     );
   };
 
-  const handleBulkDelete = () => {
+  const openDeleteConfirmation = () => {
     if (selectedArticles.length === 0) {
       toast.error("No articles selected for deletion");
       return;
     }
+    setShowDeleteConfirmation(true);
+  };
 
-    // In a real application, you would make an API call here
+  const handleBulkDelete = () => {
     setArticles((prev) =>
       prev.filter((article) => !selectedArticles.includes(article.articleId))
     );
@@ -37,6 +48,7 @@ export function InsightPageModule() {
     toast.success(`${selectedArticles.length} articles deleted successfully`);
 
     setSelectedArticles([]);
+    setShowDeleteConfirmation(false);
   };
 
   const exitBulkMode = () => {
@@ -46,6 +58,40 @@ export function InsightPageModule() {
 
   return (
     <div className="w-full z-0 min-h-screen relative">
+      {/* ShadCN Dialog Confirmation */}
+      <Dialog
+        open={showDeleteConfirmation}
+        onOpenChange={setShowDeleteConfirmation}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-center">
+              Delete Article
+            </DialogTitle>
+            <DialogDescription className="text-center text-base pt-2">
+              {selectedArticles.length} Articles selected, are you sure you want
+              to delete these articles?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex flex-col sm:flex-row gap-4 sm:justify-center pt-4">
+            <Button
+              variant="destructive"
+              className="flex-1 py-6"
+              onClick={handleBulkDelete}
+            >
+              Delete
+            </Button>
+            <Button
+              variant="default"
+              className="flex-1 py-6"
+              onClick={() => setShowDeleteConfirmation(false)}
+            >
+              Back
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <div className="w-full relative -z-10 md:px-20 px-8 md:pb-4 pb-6 md:pt-32 pt-20 mb-8">
         <div className="border-l-4 md:py-3 py-1 md:pl-6 pl-3 border-[#1059BD] text-neutral-950 font-semibold text-lg md:text-2xl">
           Article
@@ -67,7 +113,7 @@ export function InsightPageModule() {
             >
               <Button
                 variant="destructive"
-                onClick={handleBulkDelete}
+                onClick={openDeleteConfirmation}
                 disabled={selectedArticles.length === 0}
                 className="md:text-lg text-base font-semibold"
               >
