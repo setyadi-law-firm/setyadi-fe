@@ -21,6 +21,7 @@
     "axios": "^1.8.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "isomorphic-dompurify": "^2.24.0",
     "lucide-react": "^0.485.0",
     "next": "15.2.4",
     "next-auth": "^4.24.11",

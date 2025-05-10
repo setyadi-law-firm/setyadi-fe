@@ -5,7 +5,8 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Underline from "@tiptap/extension-underline";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import DOMPurify from "isomorphic-dompurify";
 
 // Shadcn UI components
 import { Button } from "@/components/ui/button";
@@ -55,6 +56,8 @@ export function InsightEditPageModule() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const mainImageInputRef = useRef<HTMLInputElement>(null);
   const [mainImage, setMainImage] = useState<string | null>(null);
+  const [editorContent, setEditorContent] = useState<string>(""); // Store as HTML
+  const [editorJSON, setEditorJSON] = useState<any>(null); // Store as JSON
 
   // Initialize TipTap editor with proper extensions
   const editor = useEditor({
@@ -69,6 +72,9 @@ export function InsightEditPageModule() {
     content: "",
     onUpdate: ({ editor }) => {
       setHasUnsavedChanges(true);
+      // Store both HTML and JSON formats
+      setEditorContent(editor.getHTML());
+      setEditorJSON(editor.getJSON());
     },
   });
 
@@ -126,7 +132,22 @@ export function InsightEditPageModule() {
   };
 
   const handleSave = () => {
-    // Implement save logic here
+    // Sanitize the HTML content before sending to server
+    const sanitizedContent = DOMPurify.sanitize(editorContent);
+
+    // Prepare the data to send to backend
+    const articleData = {
+      title,
+      author,
+      date: `${date.year}-${date.month}-${date.day}`,
+      content: sanitizedContent, // Sanitized HTML content
+      contentJSON: editorJSON, // JSON structure for future editing
+      mainImage, // You might want to upload this separately and store a URL
+    };
+
+    // Here you would make an API call to save the data
+    console.log("Saving article data:", articleData);
+
     setShowSaveDialog(true);
     // After successful save:
     // setHasUnsavedChanges(false);
@@ -143,6 +164,79 @@ export function InsightEditPageModule() {
     setShowSaveDialog(false);
     router.back();
   };
+
+  // Function to initialize editor with existing content (for edit mode)
+  const loadExistingContent = async (articleId: string) => {
+    try {
+      // Example API call - replace with your actual data fetching
+      // const response = await fetch(`/api/articles/${articleId}`);
+      // const article = await response.json();
+
+      // For demo purposes with rich formatting example:
+      const article = {
+        title: "Example Rich Text Article",
+        author: "John Doe",
+        date: "2023-05-15",
+        content: `
+          <h2>Sample Article with Rich Formatting</h2>
+          <p>This is a <strong>bold text example</strong> in a paragraph.</p>
+          <p>Here we have some <em>italic text</em> for emphasis.</p>
+          <p>And this text has <u>underline formatting</u> applied to it.</p>
+          
+          <h3>List Example</h3>
+          <ul>
+            <li>First bullet point item</li>
+            <li>Second bullet point with <strong>bold text</strong></li>
+            <li>Third bullet point with <em>italics</em></li>
+          </ul>
+          
+          <p>Below is an example image:</p>
+          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiB2aWV3Qm94PSIwIDAgMjAwIDIwMCI+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNjY2NjY2MiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSIxOCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgYWxpZ25tZW50LWJhc2VsaW5lPSJtaWRkbGUiIGZpbGw9IiM2NjY2NjYiPnNhbXBsZSBpbWFnZTwvdGV4dD48L3N2Zz4=" alt="Sample image" />
+          
+          <p>And then some more text after the image.</p>
+          
+          <h3>Numbered List</h3>
+          <ol>
+            <li>First ordered item</li>
+            <li>Second ordered item with <u>underlined text</u></li>
+            <li>Third ordered item with <strong><em>bold and italic</em></strong> text</li>
+          </ol>
+          
+          <p>This is how your content would look when retrieved from the backend.</p>
+        `,
+        // You can also include contentJSON if you're storing the JSON structure
+      };
+
+      setTitle(article.title);
+      setAuthor(article.author);
+
+      // Parse date
+      const dateParts = article.date.split("-");
+      if (dateParts.length === 3) {
+        setDate({
+          year: dateParts[0],
+          month: dateParts[1],
+          day: dateParts[2],
+        });
+      }
+
+      // Set editor content if editor is ready
+      if (editor) {
+        editor.commands.setContent(article.content);
+      }
+
+      setHasUnsavedChanges(false);
+    } catch (error) {
+      console.error("Failed to load article:", error);
+    }
+  };
+
+  // Effect to load existing content when in edit mode
+  useEffect(() => {
+    if (id && editor) {
+      loadExistingContent(id);
+    }
+  }, [id, editor]);
 
   return (
     <div className="container mx-auto p-4 max-w-6xl mt-20">
@@ -330,6 +424,17 @@ export function InsightEditPageModule() {
         {/* Editor Content with improved styling for lists */}
         <div className="border rounded-md p-4 min-h-[300px] prose-sm max-w-none">
           <EditorContent editor={editor} />
+        </div>
+
+        {/* Optional: Preview section */}
+        <div className="mt-8 border-t pt-4">
+          <Label className="mb-2">Content Preview</Label>
+          <div
+            className="border rounded-md p-4 prose max-w-none"
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(editorContent),
+            }}
+          />
         </div>
       </div>
 
