@@ -22,15 +22,18 @@ import {
 } from "@/components/ui/dialog";
 
 // Icons
-import { ArrowLeft, Save, Image as ImageIcon } from "lucide-react";
 import {
   Bold,
   Italic,
   Underline as UnderlineIcon,
   List,
   ListOrdered,
-  Quote,
   Code,
+  Heading2,
+  Heading3,
+  ArrowLeft,
+  Save,
+  Image as ImageIcon,
 } from "lucide-react";
 
 export function InsightEditPageModule() {
@@ -58,7 +61,6 @@ export function InsightEditPageModule() {
   const [mainImage, setMainImage] = useState<string | null>(null);
   const [editorContent, setEditorContent] = useState<string>(""); // Store as HTML
   const [editorJSON, setEditorJSON] = useState<any>(null); // Store as JSON
-
   // Initialize TipTap editor with proper extensions
   const editor = useEditor({
     extensions: [
@@ -248,7 +250,6 @@ export function InsightEditPageModule() {
       >
         <ArrowLeft size={16} />
       </Button>
-
       {/* Main Image Upload */}
       <Label className="mb-2">Upload Image</Label>
       <div
@@ -295,7 +296,6 @@ export function InsightEditPageModule() {
           </>
         )}
       </div>
-
       {/* Form Fields */}
       <div className="space-y-6 mb-6">
         <div className="space-y-2">
@@ -347,15 +347,37 @@ export function InsightEditPageModule() {
           </div>
         </div>
       </div>
-
       {/* Rich Text Editor */}
       <div className="mb-6">
         <Label htmlFor="content" className="block mb-2">
           Text Input
         </Label>
-
         {/* Editor Menu */}
         <div className="flex flex-wrap gap-1 mb-2 border rounded-md p-1">
+          <Button
+            type="button"
+            variant={
+              editor?.isActive("heading", { level: 2 }) ? "default" : "ghost"
+            }
+            size="sm"
+            onClick={() =>
+              editor?.chain().focus().toggleHeading({ level: 2 }).run()
+            }
+          >
+            <Heading2 className="h-4 w-4" />
+          </Button>
+          <Button
+            type="button"
+            variant={
+              editor?.isActive("heading", { level: 3 }) ? "default" : "ghost"
+            }
+            size="sm"
+            onClick={() =>
+              editor?.chain().focus().toggleHeading({ level: 3 }).run()
+            }
+          >
+            <Heading3 className="h-4 w-4" />
+          </Button>
           <Button
             type="button"
             variant={editor?.isActive("bold") ? "default" : "ghost"}
@@ -395,7 +417,7 @@ export function InsightEditPageModule() {
             onClick={() => editor?.chain().focus().toggleOrderedList().run()}
           >
             <ListOrdered className="h-4 w-4" />
-          </Button>
+          </Button>{" "}
           <Button
             type="button"
             variant={editor?.isActive("codeBlock") ? "default" : "ghost"}
@@ -420,31 +442,27 @@ export function InsightEditPageModule() {
             <ImageIcon className="h-4 w-4" />
           </Button>
         </div>
-
         {/* Editor Content with improved styling for lists */}
         <div className="border rounded-md p-4 min-h-[300px] prose-sm max-w-none">
           <EditorContent editor={editor} />
-        </div>
-
+        </div>{" "}
         {/* Optional: Preview section */}
         <div className="mt-8 border-t pt-4">
           <Label className="mb-2">Content Preview</Label>
           <div
-            className="border rounded-md p-4 prose max-w-none"
+            className="border rounded-md p-4 prose max-w-none article-preview"
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(editorContent),
             }}
           />
         </div>
       </div>
-
       {/* Submit Button */}
       <div className="flex justify-end mt-6">
         <Button type="button" onClick={handleSave}>
           <Save className="mr-2 h-4 w-4" /> Save
         </Button>
       </div>
-
       {/* Unsaved Changes Dialog */}
       <Dialog open={showUnsavedDialog} onOpenChange={setShowUnsavedDialog}>
         <DialogContent>
@@ -468,7 +486,6 @@ export function InsightEditPageModule() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
       {/* Save Article Dialog */}
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
         <DialogContent>
@@ -485,9 +502,9 @@ export function InsightEditPageModule() {
             </Button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>
-
+      </Dialog>{" "}
       <style jsx global>{`
+        /* Editor styles */
         .ProseMirror {
           outline: none;
           min-height: 280px;
@@ -515,6 +532,62 @@ export function InsightEditPageModule() {
         }
         .ProseMirror li p {
           margin: 0;
+        }
+        .ProseMirror h2 {
+          font-size: 1.5em;
+          margin-top: 1.5em;
+          margin-bottom: 0.5em;
+          font-weight: bold;
+        }
+        .ProseMirror h3 {
+          font-size: 1.25em;
+          margin-top: 1.3em;
+          margin-bottom: 0.5em;
+          font-weight: bold;
+        }
+
+        /* Preview styles */
+        .article-preview p {
+          margin: 1em 0;
+        }
+        .article-preview img {
+          max-width: 100%;
+          height: auto;
+        }
+        .article-preview ul,
+        .article-preview ol {
+          padding-left: 1.5rem;
+          margin: 1em 0;
+        }
+        .article-preview ul {
+          list-style-type: disc;
+        }
+        .article-preview ol {
+          list-style-type: decimal;
+        }
+        .article-preview li {
+          margin-bottom: 0.5em;
+        }
+        .article-preview strong {
+          font-weight: bold;
+        }
+        .article-preview em {
+          font-style: italic;
+        }
+        .article-preview u {
+          text-decoration: underline;
+        }
+        .article-preview h2 {
+          font-size: 1.5em;
+          margin-top: 1.5em;
+          margin-bottom: 0.5em;
+          font-weight: bold;
+        }
+        .article-preview h3 {
+          font-size: 1.25em;
+          margin-top: 1.3em;
+          margin-bottom: 0.5em;
+          font-weight: bold;
         }
       `}</style>
     </div>
