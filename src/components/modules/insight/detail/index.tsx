@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
 import { InsightDetailType } from "./types";
 import Image from "next/image";
+import DOMPurify from "isomorphic-dompurify";
+import "@/components/core/styles/article-content.css";
 import {
   Dialog,
   DialogContent,
@@ -141,12 +143,11 @@ export function InsightDetailPageModule() {
               year: "numeric",
             })}
           </p>
-        </div>
-
-        {/* Content */}
-        <div className="prose max-w-none mb-4 text-gray-700 leading-relaxed whitespace-pre-wrap">
-          {DUMMY_ARTICLE.content}
-        </div>
+        </div>        {/* Content */}
+        <div 
+          className="prose max-w-none mb-4 text-gray-700 leading-relaxed article-content"
+          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(DUMMY_ARTICLE.content) }}
+        />
       </div>
     </div>
   );

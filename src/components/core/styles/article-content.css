@@ -1,0 +1,43 @@
+/* Article content styles - shared between editor preview and article detail pages */
+.article-content p {
+  margin: 1em 0;
+}
+.article-content img {
+  max-width: 100%;
+  height: auto;
+}
+.article-content ul,
+.article-content ol {
+  padding-left: 1.5rem;
+  margin: 1em 0;
+}
+.article-content ul {
+  list-style-type: disc;
+}
+.article-content ol {
+  list-style-type: decimal;
+}
+.article-content li {
+  margin-bottom: 0.5em;
+}
+.article-content strong {
+  font-weight: bold;
+}
+.article-content em {
+  font-style: italic;
+}
+.article-content u {
+  text-decoration: underline;
+}
+.article-content h2 {
+  font-size: 1.5em;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+}
+.article-content h3 {
+  font-size: 1.25em;
+  margin-top: 1.3em;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+}

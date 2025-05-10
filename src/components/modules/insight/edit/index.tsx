@@ -7,6 +7,7 @@ import Image from "@tiptap/extension-image";
 import Underline from "@tiptap/extension-underline";
 import { useState, useRef, useEffect } from "react";
 import DOMPurify from "isomorphic-dompurify";
+import "@/components/core/styles/article-content.css";
 
 // Shadcn UI components
 import { Button } from "@/components/ui/button";
@@ -446,16 +447,6 @@ export function InsightEditPageModule() {
         <div className="border rounded-md p-4 min-h-[300px] prose-sm max-w-none">
           <EditorContent editor={editor} />
         </div>{" "}
-        {/* Optional: Preview section */}
-        <div className="mt-8 border-t pt-4">
-          <Label className="mb-2">Content Preview</Label>
-          <div
-            className="border rounded-md p-4 prose max-w-none article-preview"
-            dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(editorContent),
-            }}
-          />
-        </div>
       </div>
       {/* Submit Button */}
       <div className="flex justify-end mt-6">
@@ -505,10 +496,6 @@ export function InsightEditPageModule() {
       </Dialog>{" "}
       <style jsx global>{`
         /* Editor styles */
-        .ProseMirror {
-          outline: none;
-          min-height: 280px;
-        }
         .ProseMirror p {
           margin: 1em 0;
         }
@@ -530,8 +517,14 @@ export function InsightEditPageModule() {
         .ProseMirror li {
           margin-bottom: 0.5em;
         }
-        .ProseMirror li p {
-          margin: 0;
+        .ProseMirror strong {
+          font-weight: bold;
+        }
+        .ProseMirror em {
+          font-style: italic;
+        }
+        .ProseMirror u {
+          text-decoration: underline;
         }
         .ProseMirror h2 {
           font-size: 1.5em;
@@ -540,50 +533,6 @@ export function InsightEditPageModule() {
           font-weight: bold;
         }
         .ProseMirror h3 {
-          font-size: 1.25em;
-          margin-top: 1.3em;
-          margin-bottom: 0.5em;
-          font-weight: bold;
-        }
-
-        /* Preview styles */
-        .article-preview p {
-          margin: 1em 0;
-        }
-        .article-preview img {
-          max-width: 100%;
-          height: auto;
-        }
-        .article-preview ul,
-        .article-preview ol {
-          padding-left: 1.5rem;
-          margin: 1em 0;
-        }
-        .article-preview ul {
-          list-style-type: disc;
-        }
-        .article-preview ol {
-          list-style-type: decimal;
-        }
-        .article-preview li {
-          margin-bottom: 0.5em;
-        }
-        .article-preview strong {
-          font-weight: bold;
-        }
-        .article-preview em {
-          font-style: italic;
-        }
-        .article-preview u {
-          text-decoration: underline;
-        }
-        .article-preview h2 {
-          font-size: 1.5em;
-          margin-top: 1.5em;
-          margin-bottom: 0.5em;
-          font-weight: bold;
-        }
-        .article-preview h3 {
           font-size: 1.25em;
           margin-top: 1.3em;
           margin-bottom: 0.5em;
