@@ -69,6 +69,15 @@ export const DesktopNavbar = () => {
             </span>
           </NavLink>
         ))}
+        {session?.user && (
+          <Image
+            src={Assets.userIcon}
+            alt="User Icon"
+            width={24}
+            height={24}
+            className={`transition-all duration-1000`}
+          />
+        )}
       </div>
     </nav>
   );

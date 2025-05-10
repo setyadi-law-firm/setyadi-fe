@@ -49,7 +49,7 @@ export const authOptions: NextAuthOptions = {
 
           const data = response.data;
 
-          if (!data || !data.accessToken) {
+          if (!data?.accessToken) {
             throw new Error("Invalid credentials");
           }
 
@@ -67,7 +67,7 @@ export const authOptions: NextAuthOptions = {
           console.error("Error during authentication:", error);
           if (error.response) {
             throw new Error(
-              error.response.data.message || "Authentication failed"
+              error.response.data.message ?? "Authentication failed"
             );
           }
           throw new Error("Authentication failed. Please try again.");
@@ -80,7 +80,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
-        token.email = user.email || undefined;
+        token.email = user.email ?? undefined;
       }
       return token;
     },
@@ -94,7 +94,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages: {
-    signIn: "/login",
+    signIn: "/auth/login",
   },
   session: {
     strategy: "jwt",
