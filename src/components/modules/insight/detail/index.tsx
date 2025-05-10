@@ -4,8 +4,18 @@ import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
 import { InsightDetailType } from "./types";
 import Image from "next/image";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Assets } from "@/components/core";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Delete, Edit, Trash } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export function InsightDetailPageModule() {
   const { id } = useParams<{
@@ -30,8 +40,49 @@ export function InsightDetailPageModule() {
                 Aenean ut magna est. Donec vitae ipsum tortor. Praesent facilisis eu metus vel dignissim. Curabitur malesuada fermentum pulvinar. Maecenas pulvinar arcu mi, id auctor arcu sagittis sit amet. Aenean faucibus enim id nulla luctus, posuere varius orci fermentum. Sed mollis ullamcorper blandit. Nulla non diam condimentum, porttitor sem nec, molestie lorem. Phasellus lacinia purus in ante finibus ullamcorper.`,
   };
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
+  const handleDelete = () => {
+    toast.success(`Article deleted successfully`);
+
+    setShowDeleteConfirmation(false);
+  };
+
   return (
     <div className="w-full z-0 min-h-screen relative md:pt-20 pt-12">
+      {/* ShadCN Dialog Confirmation */}
+      <Dialog
+        open={showDeleteConfirmation}
+        onOpenChange={setShowDeleteConfirmation}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-center">
+              Delete Article
+            </DialogTitle>
+            <DialogDescription className="text-center text-base pt-2">
+              Are you sure you want to delete this article?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex flex-col sm:flex-row gap-4 sm:justify-center pt-4">
+            <Button
+              variant="destructive"
+              className="flex-1 py-6"
+              onClick={handleDelete}
+            >
+              Delete
+            </Button>
+            <Button
+              variant="default"
+              className="flex-1 py-6"
+              onClick={() => setShowDeleteConfirmation(false)}
+            >
+              Back
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       <div className="container mx-auto px-4 py-8">
         {/* Back Button */}
         <Button
@@ -43,11 +94,31 @@ export function InsightDetailPageModule() {
         </Button>
 
         {/* Title and Subtitle */}
-        <div className="mb-6">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
-            {DUMMY_ARTICLE.title}
-          </h1>
-          <h2 className="text-xl text-gray-600">{DUMMY_ARTICLE.subtitle}</h2>
+        <div className="mb-6 flex max-md:flex-col max-md:w-full gap-y-3 md:items-center justify-between">
+          <div className="flex flex-col">
+            <h1 className="text-4xl font-bold text-gray-800 mb-2">
+              {DUMMY_ARTICLE.title}
+            </h1>
+            <h2 className="text-xl text-gray-600">{DUMMY_ARTICLE.subtitle}</h2>
+          </div>
+          <div className="flex items-center gap-4 mt-2">
+            <Button
+              variant="default"
+              className="w-fit"
+              onClick={() => setIsEditing(true)}
+            >
+              <Edit size={16} className="mr-2" />
+              Edit
+            </Button>
+            <Button
+              variant="destructive"
+              className="w-fit"
+              onClick={() => setShowDeleteConfirmation(true)}
+            >
+              <Trash size={16} className="mr-2" />
+              Delete
+            </Button>
+          </div>
         </div>
 
         {/* Main Image */}
@@ -74,7 +145,9 @@ export function InsightDetailPageModule() {
         </div>
 
         {/* Content */}
-        <div className="prose max-w-none mb-4 text-gray-700 leading-relaxed whitespace-pre-wrap">{DUMMY_ARTICLE.content}</div>
+        <div className="prose max-w-none mb-4 text-gray-700 leading-relaxed whitespace-pre-wrap">
+          {DUMMY_ARTICLE.content}
+        </div>
       </div>
     </div>
   );
