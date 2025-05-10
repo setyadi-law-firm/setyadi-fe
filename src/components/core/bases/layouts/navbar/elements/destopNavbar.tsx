@@ -5,10 +5,18 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { NavLink } from "./navLink";
 import { LINKS } from "../constants";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Assets, LoginModal } from "@/components";
+import { Assets } from "@/components";
 import { signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export const DesktopNavbar = () => {
   const [isScrolledPastScreenHeight, setIsScrolledPastScreenHeight] =
@@ -68,15 +76,42 @@ export const DesktopNavbar = () => {
               {link.name}
             </span>
           </NavLink>
-        ))}
+        ))}{" "}
         {session?.user && (
-          <Image
-            src={Assets.userIcon}
-            alt="User Icon"
-            width={24}
-            height={24}
-            className={`transition-all duration-1000`}
-          />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div className="cursor-pointer">
+                <Image
+                  src={Assets.userIcon}
+                  alt="User Icon"
+                  width={24}
+                  height={24}
+                  className={`transition-all duration-1000`}
+                />
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-fit">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem className="flex flex-col items-start transition-all">
+                  <span className="font-medium">
+                    {session.user.name ?? "User"}
+                  </span>
+                  <span className="text-xs text-muted-foreground w-fit">
+                    {session.user.email}
+                  </span>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="text-red-500 cursor-pointer transition-all"
+                onClick={handleSignOut}
+              >
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         )}
       </div>
     </nav>
