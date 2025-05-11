@@ -16,8 +16,11 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { useRouter } from "next/navigation";
 
 export function InsightPageModule() {
+  const router = useRouter();
+
   const { data: session } = useSession();
   const [isBulking, setIsBulking] = useState(false);
   const [selectedArticles, setSelectedArticles] = useState<string[]>([]);
@@ -102,6 +105,9 @@ export function InsightPageModule() {
           <Button
             variant="ghost"
             className="border-[#1059BD] border-b-2 md:text-4xl w-fit text-2xl font-bold md:py-6 py-3 rounded-none px-2"
+            onClick={() => {
+              router.push("/insights/create");
+            }}
           >
             Add Article +
           </Button>

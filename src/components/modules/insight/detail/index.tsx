@@ -93,7 +93,7 @@ export function InsightDetailPageModule() {
         <Button
           variant="default"
           className="mb-6 rounded-md w-16 py-2"
-          onClick={() => router.back()}
+          onClick={() => router.push("/insights")}
         >
           <ArrowLeft size={16} />
         </Button>

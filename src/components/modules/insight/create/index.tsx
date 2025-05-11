@@ -39,7 +39,7 @@ import {
 } from "lucide-react";
 import { ENDPOINTS, useSetyadiClient } from "@/components/core";
 
-export function InsightEditPageModule() {
+export function InsightCreatePageModule() {
   const { id } = useParams<{
     id: string;
   }>();
@@ -159,7 +159,7 @@ export function InsightEditPageModule() {
         mainImage,
       };
 
-      const response = await setyadiClient.put(ENDPOINTS.ARTICLE, articleData);
+      const response = await setyadiClient.post(ENDPOINTS.ARTICLE, articleData);
 
       toast.success(`Article ${id ? "updated" : "created"} successfully`);
       setHasUnsavedChanges(false);
@@ -181,51 +181,6 @@ export function InsightEditPageModule() {
       setShowSaveDialog(false);
     }
   };
-  // Function to initialize editor with existing content (for edit mode)
-  const loadExistingContent = async (articleId: string) => {
-    try {
-      // Fetch article data from the API
-      const response = await setyadiClient.get(
-        `${ENDPOINTS.ARTICLE}/${articleId}`
-      );
-      const article = response.data;
-
-      // If no data is returned, use a fallback
-      if (!article) {
-        toast.error("Failed to load article data");
-        return;
-      }
-
-      setTitle(article.title);
-      setAuthor(article.author);
-
-      // Parse date
-      const dateParts = article.date.split("-");
-      if (dateParts.length === 3) {
-        setDate({
-          year: dateParts[0],
-          month: dateParts[1],
-          day: dateParts[2],
-        });
-      }
-
-      // Set editor content if editor is ready
-      if (editor) {
-        editor.commands.setContent(article.content);
-      }
-
-      setHasUnsavedChanges(false);
-    } catch (error) {
-      console.error("Failed to load article:", error);
-    }
-  };
-
-  // Effect to load existing content when in edit mode
-  useEffect(() => {
-    if (id && editor) {
-      loadExistingContent(id);
-    }
-  }, [id, editor]);
 
   return (
     <div className="container mx-auto p-4 max-w-6xl mt-20">
@@ -239,7 +194,7 @@ export function InsightEditPageModule() {
       </Button>
       <div className="w-full relative -z-10 md:pb-4 mt-4 mb-8">
         <div className="border-l-4 md:py-3 py-1 md:pl-6 pl-3 border-[#1059BD] text-neutral-950 font-semibold text-lg md:text-2xl">
-          Update Article
+          Create Article
         </div>
       </div>
       {/* Main Image Upload */}
