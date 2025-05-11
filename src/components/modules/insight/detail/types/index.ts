@@ -1,8 +1,8 @@
 export interface InsightDetailType {
   id: string;
   title: string;
-  subtitle: string;
-  imageUrl: string;
-  uploadDate: string;
+  image_url: string;
   content: string;
+  author: string;
+  created_at: string;
 }

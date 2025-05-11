@@ -15,9 +15,9 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Assets } from "@/components/core";
-import { ArrowLeft, Delete, Edit, Trash } from "lucide-react";
+import { ArrowLeft, Edit, Trash } from "lucide-react";
 import { useState } from "react";
-import { toast } from "sonner";
+import { useArticleDetail } from "./hooks/use-article-detail";
 
 export function InsightDetailPageModule() {
   const { id } = useParams<{
@@ -28,9 +28,9 @@ export function InsightDetailPageModule() {
   const DUMMY_ARTICLE: InsightDetailType = {
     id: "1",
     title: "Article Title",
-    subtitle: "Article Subtitle",
-    imageUrl: Assets.insight1,
-    uploadDate: "2023-10-01",
+    image_url: Assets.insight1,
+    author: "John Doe",
+    created_at: "2023-10-01",
     content: `                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum tempor hendrerit. Aliquam nec fermentum felis, nec malesuada erat. Praesent et auctor tellus. Vivamus pulvinar dolor diam, at tempor turpis pellentesque vel. Nulla aliquam risus vitae quam luctus iaculis. Nullam interdum, leo a volutpat pellentesque, tellus diam pretium metus, non laoreet augue felis sit amet sapien. Sed rhoncus magna sit amet mauris viverra, ac blandit ante commodo. Praesent consequat pulvinar arcu porttitor bibendum. Suspendisse ut consequat purus. Nulla a dui ut tellus consectetur dictum. Integer dapibus ligula eu lacus fringilla vestibulum. Donec vehicula elit sed facilisis luctus.
 
                 Nunc vulputate faucibus magna, vel dignissim sem. Morbi iaculis auctor nulla quis porta. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Suspendisse non neque mattis, semper augue eu, hendrerit lectus. Quisque vel ullamcorper metus, et ultrices nunc. Phasellus aliquet risus at magna ultrices, quis maximus nisl molestie. Ut condimentum vitae odio ac ultricies. Nam nibh enim, blandit id auctor nec, mattis id quam. Quisque eget augue lobortis, vehicula quam in, pulvinar massa. Sed nec enim eros. Praesent semper metus vel dolor pharetra, nec ultricies massa molestie.
@@ -42,10 +42,14 @@ export function InsightDetailPageModule() {
                 Aenean ut magna est. Donec vitae ipsum tortor. Praesent facilisis eu metus vel dignissim. Curabitur malesuada fermentum pulvinar. Maecenas pulvinar arcu mi, id auctor arcu sagittis sit amet. Aenean faucibus enim id nulla luctus, posuere varius orci fermentum. Sed mollis ullamcorper blandit. Nulla non diam condimentum, porttitor sem nec, molestie lorem. Phasellus lacinia purus in ante finibus ullamcorper.`,
   };
 
+  const { isFetching, onDelete } = useArticleDetail(id);
+
+  const data = DUMMY_ARTICLE;
+
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   const handleDelete = () => {
-    toast.success(`Article deleted successfully`);
+    onDelete();
 
     setShowDeleteConfirmation(false);
   };
@@ -93,14 +97,12 @@ export function InsightDetailPageModule() {
         >
           <ArrowLeft size={16} />
         </Button>
-
         {/* Title and Subtitle */}
         <div className="mb-6 flex max-md:flex-col max-md:w-full gap-y-3 md:items-center justify-between">
           <div className="flex flex-col">
             <h1 className="text-4xl font-bold text-gray-800 mb-2">
-              {DUMMY_ARTICLE.title}
+              {data.title}
             </h1>
-            <h2 className="text-xl text-gray-600">{DUMMY_ARTICLE.subtitle}</h2>
           </div>
           <div className="flex items-center gap-4 mt-2">
             <Button
@@ -121,32 +123,33 @@ export function InsightDetailPageModule() {
             </Button>
           </div>
         </div>
-
         {/* Main Image */}
         <div className="w-full h-[300px] relative mb-6">
           <Image
-            src={DUMMY_ARTICLE.imageUrl}
-            alt={DUMMY_ARTICLE.title}
+            src={data.image_url}
+            alt={data.title}
             fill
             className="object-cover rounded-md"
             priority
           />
         </div>
-
         {/* Upload Date */}
         <div className="mb-6">
           <p className="text-sm text-gray-500">
             Uploaded:{" "}
-            {new Date(DUMMY_ARTICLE.uploadDate).toLocaleDateString("en-US", {
+            {new Date(data.created_at).toLocaleDateString("en-US", {
               day: "numeric",
               month: "long",
               year: "numeric",
             })}
           </p>
-        </div>        {/* Content */}
-        <div 
+        </div>{" "}
+        {/* Content */}
+        <div
           className="prose max-w-none mb-4 text-gray-700 leading-relaxed article-content"
-          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(DUMMY_ARTICLE.content) }}
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(data.content),
+          }}
         />
       </div>
     </div>
