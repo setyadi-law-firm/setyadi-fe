@@ -5,7 +5,7 @@ import { DUMMY_ARTICLES } from "./constants";
 import { ArticleCard } from "./elements";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { Assets } from "@/components/core";
+import { Assets, ENDPOINTS, useSetyadiClient } from "@/components/core";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
@@ -20,12 +20,14 @@ import { useRouter } from "next/navigation";
 
 export function InsightPageModule() {
   const router = useRouter();
+  const setyadiClient = useSetyadiClient();
 
   const { data: session } = useSession();
   const [isBulking, setIsBulking] = useState(false);
   const [selectedArticles, setSelectedArticles] = useState<string[]>([]);
   const [articles, setArticles] = useState(DUMMY_ARTICLES);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleSelect = (id: string) => {
     setSelectedArticles((prev) =>
@@ -34,7 +36,6 @@ export function InsightPageModule() {
         : [...prev, id]
     );
   };
-
   const openDeleteConfirmation = () => {
     if (selectedArticles.length === 0) {
       toast.error("No articles selected for deletion");
@@ -42,16 +43,35 @@ export function InsightPageModule() {
     }
     setShowDeleteConfirmation(true);
   };
-
-  const handleBulkDelete = () => {
-    setArticles((prev) =>
-      prev.filter((article) => !selectedArticles.includes(article.articleId))
+  const handleBulkDelete = async () => {
+    const loadingToast = toast.loading(
+      `Deleting ${selectedArticles.length} articles...`
     );
+    try {
+      setIsDeleting(true);
 
-    toast.success(`${selectedArticles.length} articles deleted successfully`);
+      // Send the selected article IDs to the API
+      await setyadiClient.post(ENDPOINTS.BULK_DELETE, {
+        report_ids: selectedArticles,
+      });
 
-    setSelectedArticles([]);
-    setShowDeleteConfirmation(false);
+      // Update the local state to remove the deleted articles
+      setArticles((prev) =>
+        prev.filter((article) => !selectedArticles.includes(article.articleId))
+      );
+
+      toast.dismiss(loadingToast);
+      toast.success(`${selectedArticles.length} articles deleted successfully`);
+
+      setSelectedArticles([]);
+      setShowDeleteConfirmation(false);
+    } catch (error) {
+      console.error("Error deleting articles:", error);
+      toast.error("Failed to delete articles. Please try again.");
+    } finally {
+      toast.dismiss(loadingToast);
+      setIsDeleting(false);
+    }
   };
 
   const exitBulkMode = () => {
@@ -75,19 +95,21 @@ export function InsightPageModule() {
               {selectedArticles.length} Articles selected, are you sure you want
               to delete these articles?
             </DialogDescription>
-          </DialogHeader>
+          </DialogHeader>{" "}
           <DialogFooter className="flex flex-col sm:flex-row gap-4 sm:justify-center pt-4">
             <Button
               variant="destructive"
               className="flex-1 py-6"
               onClick={handleBulkDelete}
+              disabled={isDeleting}
             >
-              Delete
+              {isDeleting ? "Deleting..." : "Delete"}
             </Button>
             <Button
               variant="default"
               className="flex-1 py-6"
               onClick={() => setShowDeleteConfirmation(false)}
+              disabled={isDeleting}
             >
               Back
             </Button>
