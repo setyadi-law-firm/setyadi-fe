@@ -1,3 +1,4 @@
+import { ENDPOINTS } from "@/components";
 import axios from "axios";
 
 export const setyadiClient = axios.create({
@@ -13,7 +14,7 @@ export const refreshAccessToken = async (refreshToken: string | undefined) => {
   }
   
   try {
-    const response = await setyadiClient.post("/auth/refresh", {
+    const response = await setyadiClient.post(`${ENDPOINTS.REFRESH}`, {
       refreshToken,
     });
     

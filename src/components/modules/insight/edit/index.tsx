@@ -83,30 +83,99 @@ export function InsightEditPageModule() {
   });
 
   // Image upload handler
-  const handleMainImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMainImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const imageUrl = event.target?.result as string;
-        setMainImage(imageUrl);
-        setHasUnsavedChanges(true);
-      };
-      reader.readAsDataURL(file);
+      const loadingToast = toast.loading('Uploading main image...');
+      try {
+        // Show loading indicator
+        
+        // Upload the image to the server
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        const response = await setyadiClient.post(ENDPOINTS.UPLOAD_IMAGE, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        
+        // If successful, use the image URL from the server
+        if (response.data?.url) {
+          setMainImage(response.data.url);
+          setHasUnsavedChanges(true);
+          toast.dismiss(loadingToast);
+          toast.success('Main image uploaded successfully');
+        } else {
+          // If server doesn't return a URL, show error and don't set the image
+          toast.dismiss(loadingToast);
+          toast.error('Main image upload failed: No URL returned from server');
+          
+          // Reset the file input
+          if (mainImageInputRef.current) {
+            mainImageInputRef.current.value = '';
+          }
+        }
+      } catch (error) {
+        toast.dismiss(loadingToast);
+        console.error('Error uploading main image:', error);
+        toast.error('Failed to upload main image. Please try again later.');
+        
+        // Reset the file input
+        if (mainImageInputRef.current) {
+          mainImageInputRef.current.value = '';
+        }
+      }
     }
-  };
-
-  // Handle inline image upload for editor
-  const handleInlineImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  };// Handle inline image upload for editor
+  const handleInlineImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && editor) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const imageUrl = event.target?.result as string;
-        editor.chain().focus().setImage({ src: imageUrl }).run();
-        setHasUnsavedChanges(true);
-      };
-      reader.readAsDataURL(file);
+      const loadingToast = toast.loading('Uploading image...');
+      try {
+        // Show loading indicator
+        
+        // First upload the image to the server
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        const response = await setyadiClient.post(ENDPOINTS.UPLOAD_IMAGE, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        
+        // If successful, insert the image URL from the server into the editor
+        if (response.data?.url) {
+          // Insert the image with the URL from the server
+          editor.chain().focus().setImage({ 
+            src: response.data.url,
+            alt: file.name || 'Article image'
+          }).run();
+          
+          setHasUnsavedChanges(true);
+          toast.dismiss(loadingToast);
+          toast.success('Image uploaded successfully');
+        } else {
+          // If server doesn't return a URL, show error and do not insert the image
+          toast.dismiss(loadingToast);
+          toast.error('Image upload failed: No URL returned from server');
+          
+          // Reset the file input
+          if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+          }
+        }
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        toast.dismiss(loadingToast);
+        toast.error('Failed to upload image. Please try again later.');
+        
+        // Reset the file input
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+      }
     }
   };
 
@@ -153,10 +222,9 @@ export function InsightEditPageModule() {
       // Prepare the data to send to backend
       const articleData = {
         title,
-        author,
-        date: formattedDate,
         content: sanitizedContent,
-        mainImage,
+        author,
+        image_url: mainImage,
       };
 
       const response = await setyadiClient.put(ENDPOINTS.ARTICLE, articleData);

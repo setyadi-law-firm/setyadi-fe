@@ -1,5 +1,7 @@
 export class ENDPOINTS {
-  static readonly REGISTER = `/auth/register`;
-  static readonly LOGIN = `/auth/login`;
+  static readonly REGISTER = `/api/auth/register`;
+  static readonly LOGIN = `/api/auth/login`;
+  static readonly REFRESH = `/api/auth/refresh`;
   static readonly ARTICLE = `/api/reports`;
+  static readonly UPLOAD_IMAGE = `/images`;
 }
