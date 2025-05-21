@@ -8,6 +8,7 @@ export interface ArticleCardProps {
   description?: string;
   content?: string;
   articleId?: string;
+  author?: string;
   id?: string;
   isSelectable?: boolean;
   isSelected?: boolean;
@@ -25,6 +26,7 @@ export const ArticleCard = ({
   isSelectable = false,
   isSelected = false,
   onSelect,
+  author,
 }: ArticleCardProps) => {
   // Use either API fields or local props
   const cardId = id || articleId || "";
@@ -82,7 +84,7 @@ export const ArticleCard = ({
       <div className="flex flex-col">        <h3 className="flex flex-col gap-1 md:text-2xl text-lg font-bold text-neutral-950">
           {title}
         </h3>
-        <p className="md:text-lg text-base text-[#777675]">{cardDescription}</p>
+        <p className="md:text-lg text-base text-[#777675]">{author}</p>
       </div>
     </div>
   );
