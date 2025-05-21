@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
-import { InsightDetailType } from "./types";
 import Image from "next/image";
 import DOMPurify from "isomorphic-dompurify";
 import "@/components/core/styles/article-content.css";
@@ -25,34 +24,43 @@ export function InsightDetailPageModule() {
   }>();
   const router = useRouter();
 
-  const DUMMY_ARTICLE: InsightDetailType = {
-    id: "1",
-    title: "Article Title",
-    image_url: Assets.insight1,
-    author: "John Doe",
-    created_at: "2023-10-01",
-    content: `                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum tempor hendrerit. Aliquam nec fermentum felis, nec malesuada erat. Praesent et auctor tellus. Vivamus pulvinar dolor diam, at tempor turpis pellentesque vel. Nulla aliquam risus vitae quam luctus iaculis. Nullam interdum, leo a volutpat pellentesque, tellus diam pretium metus, non laoreet augue felis sit amet sapien. Sed rhoncus magna sit amet mauris viverra, ac blandit ante commodo. Praesent consequat pulvinar arcu porttitor bibendum. Suspendisse ut consequat purus. Nulla a dui ut tellus consectetur dictum. Integer dapibus ligula eu lacus fringilla vestibulum. Donec vehicula elit sed facilisis luctus.
-
-                Nunc vulputate faucibus magna, vel dignissim sem. Morbi iaculis auctor nulla quis porta. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Suspendisse non neque mattis, semper augue eu, hendrerit lectus. Quisque vel ullamcorper metus, et ultrices nunc. Phasellus aliquet risus at magna ultrices, quis maximus nisl molestie. Ut condimentum vitae odio ac ultricies. Nam nibh enim, blandit id auctor nec, mattis id quam. Quisque eget augue lobortis, vehicula quam in, pulvinar massa. Sed nec enim eros. Praesent semper metus vel dolor pharetra, nec ultricies massa molestie.
-
-                Sed ligula nulla, placerat quis tellus eget, congue condimentum turpis. Donec nec sem in ex porttitor feugiat. Nullam euismod elit nec nibh iaculis tristique. Aliquam erat volutpat. Vestibulum efficitur volutpat malesuada. Praesent at cursus libero, scelerisque venenatis purus. Cras vitae nibh urna. Aliquam ac leo cursus, sollicitudin purus et, porttitor sapien. Nunc dignissim viverra ullamcorper. Praesent eu maximus mi. Duis at orci facilisis, porttitor mauris vulputate, lacinia diam. Pellentesque in lacinia quam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras feugiat enim ac porta tempor. Etiam et augue turpis. Nullam tempor accumsan diam, et dictum mi commodo ut.
-
-                Curabitur at diam vitae odio bibendum luctus quis vestibulum erat. Donec malesuada tincidunt justo, in pretium justo varius at. Vestibulum tincidunt ex a venenatis volutpat. Etiam sed iaculis mauris. Etiam suscipit porta ipsum, eget suscipit lectus pulvinar vel. Donec et tempor ligula, ultricies pretium nisi. Aenean cursus efficitur felis at egestas. Sed facilisis fringilla tortor ac pulvinar. Nunc pretium vulputate ipsum a euismod. Integer suscipit convallis euismod. Sed nec pharetra ligula.
-
-                Aenean ut magna est. Donec vitae ipsum tortor. Praesent facilisis eu metus vel dignissim. Curabitur malesuada fermentum pulvinar. Maecenas pulvinar arcu mi, id auctor arcu sagittis sit amet. Aenean faucibus enim id nulla luctus, posuere varius orci fermentum. Sed mollis ullamcorper blandit. Nulla non diam condimentum, porttitor sem nec, molestie lorem. Phasellus lacinia purus in ante finibus ullamcorper.`,
-  };
-
-  const { isFetching, onDelete } = useArticleDetail(id);
-
-  const data = DUMMY_ARTICLE;
-
+  const { data, isFetching, onDelete, error } = useArticleDetail(id);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = () => {
+    setIsDeleting(true);
     onDelete();
-
     setShowDeleteConfirmation(false);
+    // Navigate back to insights list after deletion
+    setTimeout(() => {
+      router.push("/insights");
+    }, 1000);
   };
+
+  // Fallback image for when API doesn't return an image
+  const fallbackImage = Assets.insight1;
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-20 flex flex-col items-center justify-center">
+        <h1 className="text-2xl font-bold text-red-600 mb-4">
+          Error loading article
+        </h1>
+        <p className="text-gray-600 mb-6">
+          {error.message || "Something went wrong"}
+        </p>
+        <Button
+          variant="default"
+          onClick={() => router.push("/insights")}
+          className="flex items-center gap-2"
+        >
+          <ArrowLeft size={16} />
+          Back to Articles
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full z-0 min-h-screen relative md:pt-20 pt-12">
@@ -75,13 +83,15 @@ export function InsightDetailPageModule() {
               variant="destructive"
               className="flex-1 py-6"
               onClick={handleDelete}
+              disabled={isDeleting}
             >
-              Delete
+              {isDeleting ? "Deleting..." : "Delete"}
             </Button>
             <Button
               variant="default"
               className="flex-1 py-6"
               onClick={() => setShowDeleteConfirmation(false)}
+              disabled={isDeleting}
             >
               Back
             </Button>
@@ -97,60 +107,88 @@ export function InsightDetailPageModule() {
         >
           <ArrowLeft size={16} />
         </Button>
-        {/* Title and Subtitle */}
-        <div className="mb-6 flex max-md:flex-col max-md:w-full gap-y-3 md:items-center justify-between">
-          <div className="flex flex-col">
-            <h1 className="text-4xl font-bold text-gray-800 mb-2">
-              {data.title}
-            </h1>
+
+        {isFetching ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#1059BD] mb-4"></div>
+            <p className="text-gray-500">Loading article...</p>
           </div>
-          <div className="flex items-center gap-4 mt-2">
+        ) : data ? (
+          <>
+            {/* Title and Actions */}
+            <div className="mb-6 flex max-md:flex-col max-md:w-full gap-y-3 md:items-center justify-between">
+              <div className="flex flex-col">
+                <h1 className="text-4xl font-bold text-gray-800 mb-2">
+                  {data.title}
+                </h1>
+                <p className="text-gray-600">{data.author}</p>
+              </div>
+              <div className="flex items-center gap-4 mt-2">
+                <Button
+                  variant="default"
+                  className="w-fit"
+                  onClick={() => router.push(`/insights/${id}/edit/`)}
+                >
+                  <Edit size={16} className="mr-2" />
+                  Edit
+                </Button>
+                <Button
+                  variant="destructive"
+                  className="w-fit"
+                  onClick={() => setShowDeleteConfirmation(true)}
+                >
+                  <Trash size={16} className="mr-2" />
+                  Delete
+                </Button>
+              </div>
+            </div>
+
+            {/* Main Image */}
+            <div className="w-full h-[300px] relative mb-6">
+              <Image
+                src={data.image_url || fallbackImage}
+                alt={data.title}
+                fill
+                className="object-cover rounded-md"
+                priority
+                onError={(e) => {
+                  e.currentTarget.src = fallbackImage;
+                }}
+              />
+            </div>
+
+            {/* Upload Date */}
+            <div className="mb-6">
+              <p className="text-sm text-gray-500">
+                Uploaded:{" "}
+                {new Date(data.created_at).toLocaleDateString("en-US", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </p>
+            </div>
+
+            {/* Content */}
+            <div
+              className="prose max-w-none mb-4 text-gray-700 leading-relaxed article-content"
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(data.content),
+              }}
+            />
+          </>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-20">
+            <p className="text-xl text-gray-600">Article not found</p>
             <Button
-              variant="default"
-              className="w-fit"
-              onClick={() => router.push(`/insights/${id}/edit/`)}
+              variant="link"
+              onClick={() => router.push("/insights")}
+              className="mt-4"
             >
-              <Edit size={16} className="mr-2" />
-              Edit
-            </Button>
-            <Button
-              variant="destructive"
-              className="w-fit"
-              onClick={() => setShowDeleteConfirmation(true)}
-            >
-              <Trash size={16} className="mr-2" />
-              Delete
+              Back to articles list
             </Button>
           </div>
-        </div>
-        {/* Main Image */}
-        <div className="w-full h-[300px] relative mb-6">
-          <Image
-            src={data.image_url}
-            alt={data.title}
-            fill
-            className="object-cover rounded-md"
-            priority
-          />
-        </div>
-        {/* Upload Date */}
-        <div className="mb-6">
-          <p className="text-sm text-gray-500">
-            Uploaded:{" "}
-            {new Date(data.created_at).toLocaleDateString("en-US", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
-          </p>
-        </div>{" "}
-        {/* Content */}
-        <div
-          className="prose max-w-none mb-4 text-gray-700 leading-relaxed article-content"
-          dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(data.content),
-          }}
-        />
+        )}
       </div>
     </div>
   );

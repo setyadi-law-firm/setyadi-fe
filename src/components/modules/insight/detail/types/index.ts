@@ -5,4 +5,5 @@ export interface InsightDetailType {
   content: string;
   author: string;
   created_at: string;
+  updated_at?: string;
 }
