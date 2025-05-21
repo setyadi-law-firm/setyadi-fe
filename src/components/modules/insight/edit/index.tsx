@@ -101,8 +101,8 @@ export function InsightEditPageModule() {
         });
         
         // If successful, use the image URL from the server
-        if (response.data?.url) {
-          setMainImage(response.data.url);
+        if (response.data.data?.url) {
+          setMainImage(response.data.data.url);
           setHasUnsavedChanges(true);
           toast.dismiss(loadingToast);
           toast.success('Main image uploaded successfully');
@@ -146,10 +146,10 @@ export function InsightEditPageModule() {
         });
         
         // If successful, insert the image URL from the server into the editor
-        if (response.data?.url) {
+        if (response.data.data?.url) {
           // Insert the image with the URL from the server
           editor.chain().focus().setImage({ 
-            src: response.data.url,
+            src: response.data.data.url,
             alt: file.name || 'Article image'
           }).run();
           
@@ -236,8 +236,8 @@ export function InsightEditPageModule() {
       // Redirect to the insights list or the detail page
       if (id) {
         router.push(`/insights/${id}`);
-      } else if (response.data?.id) {
-        router.push(`/insights/${response.data.id}`);
+      } else if (response.data.data?.id) {
+        router.push(`/insights/${response.data.data.id}`);
       } else {
         router.push("/insights");
       }
@@ -256,7 +256,7 @@ export function InsightEditPageModule() {
       const response = await setyadiClient.get(
         `${ENDPOINTS.ARTICLE}/${articleId}`
       );
-      const article = response.data;
+      const article = response.data.data;
 
       // If no data is returned, use a fallback
       if (!article) {

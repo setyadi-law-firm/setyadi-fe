@@ -99,10 +99,10 @@ export function InsightCreatePageModule() {
             'Content-Type': 'multipart/form-data',
           },
         });
-        
+
         // If successful, use the image URL from the server
-        if (response.data?.url) {
-          setMainImage(response.data.url);
+        if (response.data.data?.url) {
+          setMainImage(response.data.data.url);
           setHasUnsavedChanges(true);
           toast.dismiss(loadingToast);
           toast.success('Main image uploaded successfully');
@@ -144,12 +144,12 @@ export function InsightCreatePageModule() {
             'Content-Type': 'multipart/form-data',
           },
         });
-        
+
         // If successful, insert the image URL from the server into the editor
-        if (response.data?.url) {
+        if (response.data.data?.url) {
           // Insert the image with the URL from the server
           editor.chain().focus().setImage({ 
-            src: response.data.url,
+            src: response.data.data.url,
             alt: file.name || 'Article image'
           }).run();
           
@@ -236,8 +236,8 @@ export function InsightCreatePageModule() {
       // Redirect to the insights list or the detail page
       if (id) {
         router.push(`/insights/${id}`);
-      } else if (response.data?.id) {
-        router.push(`/insights/${response.data.id}`);
+      } else if (response.data.data?.id) {
+        router.push(`/insights/${response.data.data.id}`);
       } else {
         router.push("/insights");
       }
