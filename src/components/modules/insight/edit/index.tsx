@@ -83,97 +83,113 @@ export function InsightEditPageModule() {
   });
 
   // Image upload handler
-  const handleMainImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMainImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = e.target.files?.[0];
     if (file) {
-      const loadingToast = toast.loading('Uploading main image...');
+      const loadingToast = toast.loading("Uploading main image...");
       try {
         // Show loading indicator
-        
+
         // Upload the image to the server
         const formData = new FormData();
-        formData.append('file', file);
-        
-        const response = await setyadiClient.post(ENDPOINTS.UPLOAD_IMAGE, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-        
+        formData.append("file", file);
+
+        const response = await setyadiClient.post(
+          ENDPOINTS.UPLOAD_IMAGE,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
         // If successful, use the image URL from the server
         if (response.data.data?.url) {
           setMainImage(response.data.data.url);
           setHasUnsavedChanges(true);
           toast.dismiss(loadingToast);
-          toast.success('Main image uploaded successfully');
+          toast.success("Main image uploaded successfully");
         } else {
           // If server doesn't return a URL, show error and don't set the image
           toast.dismiss(loadingToast);
-          toast.error('Main image upload failed: No URL returned from server');
-          
+          toast.error("Main image upload failed: No URL returned from server");
+
           // Reset the file input
           if (mainImageInputRef.current) {
-            mainImageInputRef.current.value = '';
+            mainImageInputRef.current.value = "";
           }
         }
       } catch (error) {
         toast.dismiss(loadingToast);
-        console.error('Error uploading main image:', error);
-        toast.error('Failed to upload main image. Please try again later.');
-        
+        console.error("Error uploading main image:", error);
+        toast.error("Failed to upload main image. Please try again later.");
+
         // Reset the file input
         if (mainImageInputRef.current) {
-          mainImageInputRef.current.value = '';
+          mainImageInputRef.current.value = "";
         }
       }
     }
-  };// Handle inline image upload for editor
-  const handleInlineImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  }; // Handle inline image upload for editor
+  const handleInlineImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = e.target.files?.[0];
     if (file && editor) {
-      const loadingToast = toast.loading('Uploading image...');
+      const loadingToast = toast.loading("Uploading image...");
       try {
         // Show loading indicator
-        
+
         // First upload the image to the server
         const formData = new FormData();
-        formData.append('file', file);
-        
-        const response = await setyadiClient.post(ENDPOINTS.UPLOAD_IMAGE, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-        
+        formData.append("file", file);
+
+        const response = await setyadiClient.post(
+          ENDPOINTS.UPLOAD_IMAGE,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
         // If successful, insert the image URL from the server into the editor
         if (response.data.data?.url) {
           // Insert the image with the URL from the server
-          editor.chain().focus().setImage({ 
-            src: response.data.data.url,
-            alt: file.name || 'Article image'
-          }).run();
-          
+          editor
+            .chain()
+            .focus()
+            .setImage({
+              src: response.data.data.url,
+              alt: file.name || "Article image",
+            })
+            .run();
+
           setHasUnsavedChanges(true);
           toast.dismiss(loadingToast);
-          toast.success('Image uploaded successfully');
+          toast.success("Image uploaded successfully");
         } else {
           // If server doesn't return a URL, show error and do not insert the image
           toast.dismiss(loadingToast);
-          toast.error('Image upload failed: No URL returned from server');
-          
+          toast.error("Image upload failed: No URL returned from server");
+
           // Reset the file input
           if (fileInputRef.current) {
-            fileInputRef.current.value = '';
+            fileInputRef.current.value = "";
           }
         }
       } catch (error) {
-        console.error('Error uploading image:', error);
+        console.error("Error uploading image:", error);
         toast.dismiss(loadingToast);
-        toast.error('Failed to upload image. Please try again later.');
-        
+        toast.error("Failed to upload image. Please try again later.");
+
         // Reset the file input
         if (fileInputRef.current) {
-          fileInputRef.current.value = '';
+          fileInputRef.current.value = "";
         }
       }
     }
@@ -213,12 +229,6 @@ export function InsightEditPageModule() {
       // Sanitize the HTML content before sending to server
       const sanitizedContent = DOMPurify.sanitize(editorContent);
 
-      // Format date properly
-      const formattedDate = `${date.year}-${date.month.padStart(
-        2,
-        "0"
-      )}-${date.day.padStart(2, "0")}`;
-
       // Prepare the data to send to backend
       const articleData = {
         title,
@@ -227,8 +237,24 @@ export function InsightEditPageModule() {
         image_url: mainImage,
       };
 
-      const response = await setyadiClient.put(ENDPOINTS.ARTICLE, articleData);
+      let response;
+      const loadingToast = toast.loading(
+        `${id ? "Updating" : "Creating"} article...`
+      );
 
+      // Use PUT for updates and POST for new articles
+      if (id) {
+        // Update existing article with PUT request
+        response = await setyadiClient.put(
+          `${ENDPOINTS.ARTICLE}/${id}`,
+          articleData
+        );
+      } else {
+        // Create new article with POST request
+        response = await setyadiClient.post(ENDPOINTS.ARTICLE, articleData);
+      }
+
+      toast.dismiss(loadingToast);
       toast.success(`Article ${id ? "updated" : "created"} successfully`);
       setHasUnsavedChanges(false);
       setShowSaveDialog(false);
@@ -236,8 +262,8 @@ export function InsightEditPageModule() {
       // Redirect to the insights list or the detail page
       if (id) {
         router.push(`/insights/${id}`);
-      } else if (response.data.data?.id) {
-        router.push(`/insights/${response.data.data.id}`);
+      } else if (response.data?.id) {
+        router.push(`/insights/${response.data.id}`);
       } else {
         router.push("/insights");
       }
@@ -252,39 +278,50 @@ export function InsightEditPageModule() {
   // Function to initialize editor with existing content (for edit mode)
   const loadExistingContent = async (articleId: string) => {
     try {
+      const loadingToast = toast.loading("Loading article...");
+
       // Fetch article data from the API
       const response = await setyadiClient.get(
         `${ENDPOINTS.ARTICLE}/${articleId}`
       );
-      const article = response.data.data;
 
-      // If no data is returned, use a fallback
+      // The API response structure is directly the article object
+      const article = response.data;
+
+      toast.dismiss(loadingToast);
+
+      // If no data is returned, show error
       if (!article) {
         toast.error("Failed to load article data");
         return;
       }
 
-      setTitle(article.title);
-      setAuthor(article.author);
+      // Update form fields with article data
+      setTitle(article.title || "");
+      setAuthor(article.author || "");
+      setMainImage(article.image_url || null);
 
-      // Parse date
-      const dateParts = article.date.split("-");
-      if (dateParts.length === 3) {
+      // Set created_at date if available
+      if (article.created_at) {
+        const date = new Date(article.created_at);
         setDate({
-          year: dateParts[0],
-          month: dateParts[1],
-          day: dateParts[2],
+          year: date.getFullYear().toString(),
+          month: (date.getMonth() + 1).toString().padStart(2, "0"),
+          day: date.getDate().toString().padStart(2, "0"),
         });
       }
 
       // Set editor content if editor is ready
-      if (editor) {
+      if (editor && article.content) {
         editor.commands.setContent(article.content);
+        setEditorContent(article.content);
       }
 
+      toast.success("Article loaded successfully");
       setHasUnsavedChanges(false);
     } catch (error) {
       console.error("Failed to load article:", error);
+      toast.error("Failed to load article. Please try again.");
     }
   };
 
@@ -304,10 +341,10 @@ export function InsightEditPageModule() {
         onClick={handleBack}
       >
         <ArrowLeft size={16} />
-      </Button>
+      </Button>{" "}
       <div className="w-full relative -z-10 md:pb-4 mt-4 mb-8">
         <div className="border-l-4 md:py-3 py-1 md:pl-6 pl-3 border-[#1059BD] text-neutral-950 font-semibold text-lg md:text-2xl">
-          Update Article
+          {id ? "Update Article" : "Create Article"}
         </div>
       </div>
       {/* Main Image Upload */}
