@@ -60,8 +60,10 @@ export function InsightPageModule() {
       setIsDeleting(true);
 
       // Send the selected article IDs to the API
-      await setyadiClient.post(ENDPOINTS.BULK_DELETE, {
-        report_ids: selectedArticles,
+      await setyadiClient.delete(ENDPOINTS.BULK_DELETE, {
+        data: {
+          report_ids: selectedArticles,
+        }
       });
 
       // Update the local state to remove the deleted articles
