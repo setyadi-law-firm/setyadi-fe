@@ -3,9 +3,12 @@ import Image from "next/image";
 
 export interface ArticleCardProps {
   title: string;
-  imageUrl: string;
-  description: string;
-  articleId: string;
+  imageUrl?: string;
+  image_url?: string;
+  description?: string;
+  content?: string;
+  articleId?: string;
+  id?: string;
   isSelectable?: boolean;
   isSelected?: boolean;
   onSelect?: (id: string) => void;
@@ -14,17 +17,25 @@ export interface ArticleCardProps {
 export const ArticleCard = ({
   title,
   imageUrl,
+  image_url,
   description,
+  content,
   articleId,
+  id,
   isSelectable = false,
   isSelected = false,
   onSelect,
 }: ArticleCardProps) => {
+  // Use either API fields or local props
+  const cardId = id || articleId || "";
+  const imageSource = image_url || imageUrl || "";
+  const cardDescription = description || (content ? content.replace(/<[^>]*>/g, '').substring(0, 100) + '...' : "");
+  
   const handleCardClick = () => {
     if (isSelectable && onSelect) {
-      onSelect(articleId);
+      onSelect(cardId);
     } else {
-      window.open(`/insights/${articleId}`, "_blank");
+      window.open(`/insights/${cardId}`, "_blank");
     }
   };
 
@@ -42,9 +53,8 @@ export const ArticleCard = ({
       role="button"
       tabIndex={0}
     >
-      <div className="relative rounded-sm shrink-0 aspect-video mb-4 shadow-lg">
-        <Image
-          src={imageUrl}
+      <div className="relative rounded-sm shrink-0 aspect-video mb-4 shadow-lg">        <Image
+          src={imageSource || "/images/insight-1.webp"}
           alt={title}
           objectFit="cover"
           layout="fill"
@@ -69,11 +79,10 @@ export const ArticleCard = ({
           </div>
         )}
       </div>
-      <div className="flex flex-col">
-        <h3 className="flex flex-col gap-1 md:text-2xl text-lg font-bold text-neutral-950">
+      <div className="flex flex-col">        <h3 className="flex flex-col gap-1 md:text-2xl text-lg font-bold text-neutral-950">
           {title}
         </h3>
-        <p className="md:text-lg text-base text-[#777675]">{description}</p>
+        <p className="md:text-lg text-base text-[#777675]">{cardDescription}</p>
       </div>
     </div>
   );

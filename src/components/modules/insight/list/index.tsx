@@ -1,13 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { DUMMY_ARTICLES } from "./constants";
 import { ArticleCard } from "./elements";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { Assets, ENDPOINTS, useSetyadiClient } from "@/components/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { ArticleResponseType, useInsights } from "./hooks";
 import {
   Dialog,
   DialogContent,
@@ -23,11 +23,20 @@ export function InsightPageModule() {
   const setyadiClient = useSetyadiClient();
 
   const { data: session } = useSession();
+  const { articles: apiArticles, isLoading, refetch } = useInsights();
+
   const [isBulking, setIsBulking] = useState(false);
   const [selectedArticles, setSelectedArticles] = useState<string[]>([]);
-  const [articles, setArticles] = useState(DUMMY_ARTICLES);
+  const [articles, setArticles] = useState<ArticleResponseType[]>([]);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  // Update articles when API data is loaded
+  useEffect(() => {
+    if (apiArticles && apiArticles.length > 0) {
+      setArticles(apiArticles);
+    }
+  }, [apiArticles]);
 
   const handleSelect = (id: string) => {
     setSelectedArticles((prev) =>
@@ -57,7 +66,7 @@ export function InsightPageModule() {
 
       // Update the local state to remove the deleted articles
       setArticles((prev) =>
-        prev.filter((article) => !selectedArticles.includes(article.articleId))
+        prev.filter((article) => !selectedArticles.includes(article.id))
       );
 
       toast.dismiss(loadingToast);
@@ -171,10 +180,10 @@ export function InsightPageModule() {
       <div className="md:gap-y-8 gap-y-12 gap-x-4 px-8 md:px-20 pb-20 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {articles.map((article) => (
           <ArticleCard
-            key={article.articleId}
+            key={article.id}
             {...article}
             isSelectable={isBulking}
-            isSelected={selectedArticles.includes(article.articleId)}
+            isSelected={selectedArticles.includes(article.id)}
             onSelect={handleSelect}
           />
         ))}
