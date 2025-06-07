@@ -17,8 +17,8 @@ export const Footer = () => {
             className=""
           />
           <p className="text-sm max-md:text-xs text-white mt-2">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-            vestibulum at lorem a mattis.
+            A consulting firm driven to empower energy sector businesses with
+            clarity and strategic insight.
           </p>
         </div>
         <div className="flex max-md:flex-col gap-y-8 gap-x-6">
@@ -26,17 +26,20 @@ export const Footer = () => {
             <div className="flex gap-3">
               <MapPin size={20} className="text-white" />
               <p className="text-sm max-md:text-xs text-white">
-                Jl. Alamat Kantor
+                Bumi Pusaka Cinere, Gandul, Cinere, Depok 16514, Jawa Barat,
+                Indonesia
               </p>
             </div>
             <div className="flex gap-3">
               <Phone size={20} className="text-white" />
-              <p className="text-sm max-md:text-xs text-white">022-23294834</p>
+              <p className="text-sm max-md:text-xs text-white">
+                +62 21 7532 420
+              </p>
             </div>
             <div className="flex gap-3">
               <Mail size={20} className="text-white" />
               <p className="text-sm max-md:text-xs text-white">
-                setyadi@gmail.com
+                setyadiandpartner@gmail.com
               </p>
             </div>
           </div>

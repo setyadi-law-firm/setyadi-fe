@@ -19,8 +19,8 @@ export function VisionSection() {
       </div>
       <div className="md:w-1/3 flex flex-col items-center">
         <p className="text-[#777675] font-semibold mb-4">
-          Our team of experts has extensive experience across various areas of
-          law
+          Our legal and business experts bring deep knowledge and ready to
+          support clients through every stage of growth.
         </p>
         <Button
           variant={"default"}

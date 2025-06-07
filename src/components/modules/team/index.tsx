@@ -1,4 +1,4 @@
-import { DUMMY_TEAM_MEMBERS } from "./constants";
+import { TEAM_MEMBERS } from "./constants";
 import { TeamMemberCard } from "./elements";
 
 export function TeamPageModule() {
@@ -10,7 +10,7 @@ export function TeamPageModule() {
         </div>
       </div>
       <div className="flex flex-col gap-8 px-8 md:px-20 pb-20 w-full">
-        {DUMMY_TEAM_MEMBERS.map((member) => (
+        {TEAM_MEMBERS.map((member) => (
           <TeamMemberCard key={member.name} {...member} />
         ))}
       </div>

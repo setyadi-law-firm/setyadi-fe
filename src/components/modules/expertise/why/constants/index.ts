@@ -27,19 +27,15 @@ export const EXPERTISE_VALUES = [
 
 export const EXPERTISE_WHY = [
   {
-    header: "Deep Legal Understanding",
-    text: "We bring decades of practical experience across a broad spectrum of industries — ensuring your legal needs are handled by experts who understand the full picture.",
+    header: "Sector-Focused Expertise",
+    text: "We specialize in legal and business challenges unique to the energy industry — from oil & gas operations to renewable energy ventures and infrastructure policy.",
   },
   {
-    header: "Strategic Legal Partnership",
-    text: "In today’s evolving legal and business landscape, you need more than just legal representation — you need a partner who understands your industry, anticipates challenges, and protects your interests with precision and dedication.",
+    header: "Policy & Regulatory Guidance",
+    text: "We provide actionable advice to help clients stay ahead of regulatory changes, align with energy policies, and meet sustainability standards.",
   },
   {
-    header: "Proven Track Record",
-    text: "Our history of successful outcomes speaks for itself. We have a proven track record of achieving favorable results for our clients, no matter the complexity of the case.",
-  },
-  {
-    header: "Tailored Solutions",
-    text: "We understand that every client is unique. Our approach is to provide customized legal solutions that align with your specific needs and goals.",
+    header: "Dispute & Risk Management",
+    text: "We assist in resolving disputes efficiently while protecting your commercial interests — ensuring legal and operational continuity in complex environments.",
   },
 ];

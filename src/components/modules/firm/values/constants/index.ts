@@ -2,31 +2,26 @@ export const FIRM_VALUES = [
   {
     header: "Integrity",
     description:
-      "We uphold honesty, transparency, and ethical standards in every action we take.",
+      "We uphold honesty, transparency, and ethical standards in every decision and interaction.",
   },
   {
-    header: "Integrity",
+    header: "Expertise",
     description:
-      "We uphold honesty, transparency, and ethical standards in every action we take.",
+      "Our team blends legal precision with deep sector knowledge to deliver practical, high-impact results.",
   },
   {
-    header: "Integrity",
+    header: "Commitment",
     description:
-      "We uphold honesty, transparency, and ethical standards in every action we take.",
+      "We put client goals at the center, offering personalized, solution-oriented guidance.",
   },
   {
-    header: "Integrity",
+    header: "Sustainability",
     description:
-      "We uphold honesty, transparency, and ethical standards in every action we take.",
+      "We believe in responsible legal practice that supports long-term energy and environmental goals.",
   },
   {
-    header: "Integrity",
+    header: "Collaboration",
     description:
-      "We uphold honesty, transparency, and ethical standards in every action we take.",
-  },
-  {
-    header: "Integrity",
-    description:
-      "We uphold honesty, transparency, and ethical standards in every action we take.",
+      "We work as one team, engaging clients as partners and leveraging collective strength.",
   },
 ];

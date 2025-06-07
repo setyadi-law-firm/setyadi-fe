@@ -32,9 +32,9 @@ export function ExpertiseSection() {
             />
 
             {/* Content container that moves on hover */}
-            <div className="absolute inset-0 md:p-6 p-4 flex flex-col pt-36 md:pt-56 transition-all duration-500 ease-in-out md:group-hover:pt-6 group-hover:pt-3">
+            <div className="absolute inset-0 md:p-6 p-4 flex flex-col pt-36 md:pt-56 transition-all duration-500 ease-in-out md:group-hover:pt-6 group-hover:pt-3 justify-end">
               {/* Title */}
-              <h3 className="text-neutral-50 font-semibold md:text-2xl text-lg mb-2 transition-all duration-500">
+              <h3 className="text-neutral-50 font-semibold  md:text-2xl text-lg mb-2 transition-all duration-500">
                 {value.header}
               </h3>
 

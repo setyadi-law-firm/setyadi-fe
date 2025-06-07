@@ -1,38 +1,26 @@
 export const EXPERTISE_VALUES = [
   {
-    header: "Litigation and Dispute Resolution",
+    header: "Energy Law",
     img_url: "/images/insight-1.webp",
     description:
-      "We represent clients in complex litigation and arbitration matters across multiple jurisdictions. Our seasoned litigators are equipped to resolve disputes efficiently — whether in courtrooms or through alternative dispute resolution methods.",
+      "As the backbone of a society’s development, the energy sector industry is important to get right. We advise and assist businesses in this sector on, but not limited to, oil and gas matters, mining industry, as well as new and renewable energy development. We help your business in addressing the challenges of Production Sharing Contract (PSC), mining concessions, and business and administrative-related issues.",
   },
   {
-    header: "Litigation and Dispute Resolution",
+    header: "Business Legality",
     img_url: "/images/insight-1.webp",
     description:
-      "We represent clients in complex litigation and arbitration matters across multiple jurisdictions. Our seasoned litigators are equipped to resolve disputes efficiently — whether in courtrooms or through alternative dispute resolution methods.",
+      "Completing the legality is an essential step in conducting your business. We will assist you in completing your business administrative needs such as permits and registration to the government’s website. We can also help with the compliance aspect in order for your business to operate regularly without any concerns, thus giving you a peace of mind.",
   },
   {
-    header: "Litigation and Dispute Resolution",
+    header: "Policy Studies and Advice",
     img_url: "/images/insight-1.webp",
     description:
-      "We represent clients in complex litigation and arbitration matters across multiple jurisdictions. Our seasoned litigators are equipped to resolve disputes efficiently — whether in courtrooms or through alternative dispute resolution methods.",
+      "We can provide advisory opinions on the policies that may affect your business. We will help you to analyse important aspects to bear in mind and navigate through all the issues that may arise from a policy. For government officials, we can also provide studies to advise on what to improve in the regulations and their implementation, to bridge the interests between stakeholders.",
   },
   {
-    header: "Litigation and Dispute Resolution",
+    header: "Constitutional Issues",
     img_url: "/images/insight-1.webp",
     description:
-      "We represent clients in complex litigation and arbitration matters across multiple jurisdictions. Our seasoned litigators are equipped to resolve disputes efficiently — whether in courtrooms or through alternative dispute resolution methods.",
-  },
-  {
-    header: "Litigation and Dispute Resolution",
-    img_url: "/images/insight-1.webp",
-    description:
-      "We represent clients in complex litigation and arbitration matters across multiple jurisdictions. Our seasoned litigators are equipped to resolve disputes efficiently — whether in courtrooms or through alternative dispute resolution methods.",
-  },
-  {
-    header: "Litigation and Dispute Resolution",
-    img_url: "/images/insight-1.webp",
-    description:
-      "We represent clients in complex litigation and arbitration matters across multiple jurisdictions. Our seasoned litigators are equipped to resolve disputes efficiently — whether in courtrooms or through alternative dispute resolution methods.",
+      "Fighting for your basic rights is key to every person. We can assist you to file a constitutional review of a law that may have violated you, your company, or your organisation’s rights. We also provide a Constitutional Decision Impact Assessment (CDIA) should your business need to pay attention to some legal provisions affected by the Constitutional Court (Mahkamah Konstitusi)’s decision.",
   },
 ];

@@ -69,13 +69,13 @@ export function WhySection() {
       <div className="md:w-1/2 w-full flex justify-center flex-col">
         <h3 className="md:text-4xl font-bold md:mb-12 mb-6">Why Choose Us</h3>
         <h4 className="md:text-4xl text-2xl font-bold mb-4 text-[#1059BD]">
-          Strategic Legal Partnership for Every Stage of Growth
+          Strategic Legal Partnership for the Energy Sector
         </h4>
         <p className="mb-8 text-[#777675]">
-          In today’s evolving legal and business landscape, you need more than
-          just legal representation — you need a partner who understands your
-          industry, anticipates challenges, and protects your interests with
-          precision and dedication.
+          In a highly regulated and rapidly evolving energy landscape, we go
+          beyond legal representation — offering strategic counsel to help
+          businesses navigate legal complexities, policy shifts, and commercial
+          risks with confidence and clarity.
         </p>
       </div>
       <div className="md:w-1/2 w-full flex items-center gap-3 justify-center">
