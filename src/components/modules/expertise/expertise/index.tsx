@@ -4,8 +4,11 @@ import Image from "next/image";
 
 export function ExpertiseSection() {
   return (
-    <div className="items-center w-full z-0 relative gap-16">
-      <div className="w-full pb-12 relative -z-10 pt-20 md:px-20 px-8">
+    <div
+      className="items-center w-full z-0 relative gap-16 pt-24"
+      id="expertise"
+    >
+      <div className="w-full pb-12 relative -z-10 md:px-20 px-8">
         <div className="py-3 text-neutral-950 font-bold text-base md:text-4xl">
           Our Expertise
         </div>
