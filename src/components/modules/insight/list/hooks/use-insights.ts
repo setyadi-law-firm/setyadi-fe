@@ -1,3 +1,5 @@
+"use client";
+
 import { ENDPOINTS, useSetyadiClient } from "@/components/core";
 import { useSession } from "next-auth/react";
 import { useQuery } from "react-query";
@@ -16,17 +18,17 @@ export const useInsights = () => {
   const client = useSetyadiClient();
   const { data: session } = useSession();
 
-  const { data, isLoading, error, refetch } = useQuery<ArticleResponseType[], Error>(
-    ["get-all-articles"],
-    {
-      queryFn: async () => {
-        const { data } = await client.get(ENDPOINTS.ARTICLE);
-        return data as ArticleResponseType[];
-      },
-      enabled: !!session,
-      refetchOnWindowFocus: false,
-    }
-  );
+  const { data, isLoading, error, refetch } = useQuery<
+    ArticleResponseType[],
+    Error
+  >(["get-all-articles"], {
+    queryFn: async () => {
+      const { data } = await client.get(ENDPOINTS.ARTICLE);
+      return data as ArticleResponseType[];
+    },
+    enabled: !!session,
+    refetchOnWindowFocus: false,
+  });
 
   return {
     articles: data || [],

@@ -63,7 +63,7 @@ export function InsightPageModule() {
       await setyadiClient.delete(ENDPOINTS.BULK_DELETE, {
         data: {
           report_ids: selectedArticles,
-        }
+        },
       });
 
       // Update the local state to remove the deleted articles
@@ -179,17 +179,62 @@ export function InsightPageModule() {
           </div>
         </div>
       )}
-      <div className="md:gap-y-8 gap-y-12 gap-x-4 px-8 md:px-20 pb-20 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {articles.map((article) => (
-          <ArticleCard
-            key={article.id}
-            {...article}
-            isSelectable={isBulking}
-            isSelected={selectedArticles.includes(article.id)}
-            onSelect={handleSelect}
-          />
-        ))}
-      </div>
+
+      {/* Articles grid or empty state */}
+      {articles.length > 0 ? (
+        <div className="md:gap-y-8 gap-y-12 gap-x-4 px-8 md:px-20 pb-20 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {articles.map((article) => (
+            <ArticleCard
+              key={article.id}
+              {...article}
+              isSelectable={isBulking}
+              isSelected={selectedArticles.includes(article.id)}
+              onSelect={handleSelect}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center px-8 md:px-20 pb-20 pt-10">
+          <div className="text-center max-w-md">
+            <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+              <svg
+                className="w-12 h-12 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              No articles yet
+            </h3>
+            {session?.user ? (
+              <>
+                <p className="text-gray-600 mb-6">
+                  Get started by creating your first article to share insights
+                  with your community.
+                </p>
+                <Button
+                  onClick={() => router.push("/insights/create")}
+                  className="bg-[#1059BD] hover:bg-[#0d4da3] text-white px-6 py-3"
+                >
+                  Create Your First Article
+                </Button>
+              </>
+            ) : (
+              <p className="text-neutral-500 text-center max-w-md">
+                Check back later for the latest insights and articles.
+              </p>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
