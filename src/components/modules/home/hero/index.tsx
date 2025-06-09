@@ -27,9 +27,6 @@ export function HeroSection() {
           policy advice to dispute resolution and sustainable energy
           development.
         </p>
-        <div className="bg-[#1059BD] cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out text-white font-bold py-4 px-10 rounded-xl mt-10">
-          Button
-        </div>
       </div>
     </div>
   );
