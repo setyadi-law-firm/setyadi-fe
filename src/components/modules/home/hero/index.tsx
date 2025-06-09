@@ -13,7 +13,7 @@ export function HeroSection() {
           alt="Hero Background Image"
           src={Assets.homeHeroBg}
           className={cn(
-            "object-cover pointer-events-none object-left -z-10 brightness-[40%] grayscale select-none drag-none"
+            "object-cover pointer-events-none object-left -z-10 brightness-[40%] saturate-200 select-none drag-none"
           )}
         />
       </div>
