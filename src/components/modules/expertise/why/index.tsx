@@ -24,7 +24,7 @@ export const AnimatedWhyDiv = ({
       className={cn(
         "flex flex-col gap-4 transition-all h-[500px] relative duration-500 text-neutral-50 overflow-clip ease-in-out mb-20",
         {
-          "bg-[#11305A] md:w-64 w-48": isHovered,
+          "bg-[#11305A] md:w-80 w-48": isHovered,
           "bg-[#1059BD] md:w-16 w-12": !isHovered,
         }
       )}
@@ -32,7 +32,7 @@ export const AnimatedWhyDiv = ({
     >
       <div
         className={cn(
-          "transition-all duration-500 mx:px-6 px-4 md:py-9 py-6 md:w-64 w-48",
+          "transition-all duration-500 mx:px-6 px-4 md:py-9 py-6 md:w-80 w-48",
           {
             "opacity-100": isHovered,
             "opacity-0": !isHovered,
@@ -65,8 +65,8 @@ export function WhySection() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(0);
 
   return (
-    <div className="flex max-md:flex-col items-center w-full z-0 min-h-screen relative gap-x-16 gap-y-8 md:px-20 px-8 max-md:mt-32">
-      <div className="md:w-1/2 w-full flex justify-center flex-col">
+    <div className="flex max-md:flex-col items-center w-full z-0 min-h-screen relative gap-x-20 gap-y-8 md:px-20 px-8 max-md:mt-32">
+      <div className="md:grow w-full flex justify-center flex-col">
         <h3 className="md:text-4xl font-bold md:mb-12 mb-6">Why Choose Us</h3>
         <h4 className="md:text-4xl text-2xl font-bold mb-4 text-[#1059BD]">
           Strategic Legal Partnership for the Energy Sector

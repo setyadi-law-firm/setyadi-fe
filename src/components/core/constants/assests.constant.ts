@@ -8,4 +8,7 @@ export class Assets {
   static readonly bulkIcon = "/images/bulk-icon.svg";
   static readonly team1 = "/images/team-1.webp";
   static readonly team2 = "/images/team-2.jpg";
+  static readonly businessLegality = "/images/business-legality.webp";
+  static readonly constitutionalIssues = "/images/constitutional-issues.webp";
+  static readonly energyLaw = "/images/energy-law.webp";
 }
