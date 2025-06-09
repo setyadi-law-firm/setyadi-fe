@@ -19,10 +19,6 @@ export const LINKS = {
     name: "Insights",
     href: "/insights",
   },
-  CONTACT: {
-    name: "Contact",
-    href: "/contact",
-  },
   PARTNERS: {
     name: "For Partners",
     href: "/admin/login",
