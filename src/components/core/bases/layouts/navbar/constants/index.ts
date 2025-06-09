@@ -25,6 +25,6 @@ export const LINKS = {
   },
   PARTNERS: {
     name: "For Partners",
-    href: "/partners",
+    href: "/admin/login",
   },
 };
