@@ -25,9 +25,7 @@ export function VisionSection() {
         <Button
           variant={"default"}
           className="bg-[#1059BD] text-white hover:bg-[#0e4da8] w-full mt-4"
-          onClick={() =>
-            window.open("https://www.linkedin.com/company/legally-legal/")
-          }
+          onClick={() => window.location.href = "/team"}
         >
           Explore Our Team
         </Button>
