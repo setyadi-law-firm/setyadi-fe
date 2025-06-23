@@ -576,10 +576,13 @@ export function InsightEditPageModule() {
             onClick={() => fileInputRef.current?.click()}
           >
             <ImageIcon className="h-4 w-4" />
-          </Button>
+          </Button>{" "}
         </div>
         {/* Editor Content with improved styling for lists */}
-        <div className="border rounded-md p-4 min-h-[300px] prose-sm max-w-none">
+        <div
+          className="border rounded-md p-4 min-h-[300px] prose-sm max-w-none cursor-text"
+          onClick={() => editor?.chain().focus().run()}
+        >
           <EditorContent editor={editor} />
         </div>{" "}
       </div>
@@ -631,6 +634,11 @@ export function InsightEditPageModule() {
       </Dialog>{" "}
       <style jsx global>{`
         /* Editor styles */
+        .ProseMirror {
+          outline: none;
+          min-height: 268px; /* Adjust for padding (300px - 32px padding) */
+          width: 100%;
+        }
         .ProseMirror p {
           margin: 1em 0;
         }
