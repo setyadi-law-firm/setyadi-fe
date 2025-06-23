@@ -225,6 +225,45 @@ export function InsightEditPageModule() {
     router.push("/insights");
   };
   const confirmSave = async () => {
+    // Validate required fields
+    const missingFields = [];
+
+    if (!title.trim()) {
+      missingFields.push("Title");
+    }
+
+    if (!author.trim()) {
+      missingFields.push("Author");
+    }
+
+    if (!mainImage) {
+      missingFields.push("Main Image");
+    }
+
+    if (!editorContent.trim() || editorContent === "<p></p>") {
+      missingFields.push("Article Content");
+    }
+
+    // Show toast for missing fields
+    if (missingFields.length > 0) {
+      if (missingFields.length === 1) {
+        toast.error(`Please fill in the ${missingFields[0]} field.`);
+      } else if (missingFields.length === 2) {
+        toast.error(
+          `Please fill in the ${missingFields[0]} and ${missingFields[1]} fields.`
+        );
+      } else {
+        const lastField = missingFields.pop();
+        toast.error(
+          `Please fill in the ${missingFields.join(
+            ", "
+          )}, and ${lastField} fields.`
+        );
+      }
+      setShowSaveDialog(false);
+      return;
+    }
+
     try {
       // Sanitize the HTML content before sending to server
       const sanitizedContent = DOMPurify.sanitize(editorContent);

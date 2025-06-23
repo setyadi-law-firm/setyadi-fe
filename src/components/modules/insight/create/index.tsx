@@ -83,97 +83,113 @@ export function InsightCreatePageModule() {
   });
 
   // Image upload handler
-  const handleMainImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMainImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = e.target.files?.[0];
     if (file) {
-      const loadingToast = toast.loading('Uploading main image...');
+      const loadingToast = toast.loading("Uploading main image...");
       try {
         // Show loading indicator
-        
+
         // Upload the image to the server
         const formData = new FormData();
-        formData.append('file', file);
-        
-        const response = await setyadiClient.post(ENDPOINTS.UPLOAD_IMAGE, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+        formData.append("file", file);
+
+        const response = await setyadiClient.post(
+          ENDPOINTS.UPLOAD_IMAGE,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
 
         // If successful, use the image URL from the server
         if (response.data.data?.url) {
           setMainImage(response.data.data.url);
           setHasUnsavedChanges(true);
           toast.dismiss(loadingToast);
-          toast.success('Main image uploaded successfully');
+          toast.success("Main image uploaded successfully");
         } else {
           // If server doesn't return a URL, show error and don't set the image
           toast.dismiss(loadingToast);
-          toast.error('Main image upload failed: No URL returned from server');
-          
+          toast.error("Main image upload failed: No URL returned from server");
+
           // Reset the file input
           if (mainImageInputRef.current) {
-            mainImageInputRef.current.value = '';
+            mainImageInputRef.current.value = "";
           }
         }
       } catch (error) {
         toast.dismiss(loadingToast);
-        console.error('Error uploading main image:', error);
-        toast.error('Failed to upload main image. Please try again later.');
-        
+        console.error("Error uploading main image:", error);
+        toast.error("Failed to upload main image. Please try again later.");
+
         // Reset the file input
         if (mainImageInputRef.current) {
-          mainImageInputRef.current.value = '';
+          mainImageInputRef.current.value = "";
         }
       }
     }
-  };// Handle inline image upload for editor
-  const handleInlineImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  }; // Handle inline image upload for editor
+  const handleInlineImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = e.target.files?.[0];
     if (file && editor) {
-      const loadingToast = toast.loading('Uploading image...');
+      const loadingToast = toast.loading("Uploading image...");
       try {
         // Show loading indicator
-        
+
         // First upload the image to the server
         const formData = new FormData();
-        formData.append('file', file);
-        
-        const response = await setyadiClient.post(ENDPOINTS.UPLOAD_IMAGE, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+        formData.append("file", file);
+
+        const response = await setyadiClient.post(
+          ENDPOINTS.UPLOAD_IMAGE,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
 
         // If successful, insert the image URL from the server into the editor
         if (response.data.data?.url) {
           // Insert the image with the URL from the server
-          editor.chain().focus().setImage({ 
-            src: response.data.data.url,
-            alt: file.name || 'Article image'
-          }).run();
-          
+          editor
+            .chain()
+            .focus()
+            .setImage({
+              src: response.data.data.url,
+              alt: file.name || "Article image",
+            })
+            .run();
+
           setHasUnsavedChanges(true);
           toast.dismiss(loadingToast);
-          toast.success('Image uploaded successfully');
+          toast.success("Image uploaded successfully");
         } else {
           // If server doesn't return a URL, show error and do not insert the image
           toast.dismiss(loadingToast);
-          toast.error('Image upload failed: No URL returned from server');
-          
+          toast.error("Image upload failed: No URL returned from server");
+
           // Reset the file input
           if (fileInputRef.current) {
-            fileInputRef.current.value = '';
+            fileInputRef.current.value = "";
           }
         }
       } catch (error) {
-        console.error('Error uploading image:', error);
+        console.error("Error uploading image:", error);
         toast.dismiss(loadingToast);
-        toast.error('Failed to upload image. Please try again later.');
-        
+        toast.error("Failed to upload image. Please try again later.");
+
         // Reset the file input
         if (fileInputRef.current) {
-          fileInputRef.current.value = '';
+          fileInputRef.current.value = "";
         }
       }
     }
@@ -209,15 +225,47 @@ export function InsightCreatePageModule() {
     router.push("/insights");
   };
   const confirmSave = async () => {
+    // Validate required fields
+    const missingFields = [];
+
+    if (!title.trim()) {
+      missingFields.push("Title");
+    }
+
+    if (!author.trim()) {
+      missingFields.push("Author");
+    }
+
+    if (!mainImage) {
+      missingFields.push("Main Image");
+    }
+
+    if (!editorContent.trim() || editorContent === "<p></p>") {
+      missingFields.push("Article Content");
+    }
+
+    // Show toast for missing fields
+    if (missingFields.length > 0) {
+      if (missingFields.length === 1) {
+        toast.error(`Please fill in the ${missingFields[0]} field.`);
+      } else if (missingFields.length === 2) {
+        toast.error(
+          `Please fill in the ${missingFields[0]} and ${missingFields[1]} fields.`
+        );
+      } else {
+        const lastField = missingFields.pop();
+        toast.error(
+          `Please fill in the ${missingFields.join(
+            ", "
+          )}, and ${lastField} fields.`
+        );
+      }
+      setShowSaveDialog(false);
+      return;
+    }
     try {
       // Sanitize the HTML content before sending to server
       const sanitizedContent = DOMPurify.sanitize(editorContent);
-
-      // Format date properly
-      const formattedDate = `${date.year}-${date.month.padStart(
-        2,
-        "0"
-      )}-${date.day.padStart(2, "0")}`;
 
       // Prepare the data to send to backend
       const articleData = {
