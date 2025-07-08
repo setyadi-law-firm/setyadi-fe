@@ -45,7 +45,7 @@ export function InsightSection() {
           <h3 className="text-xl font-semibold text-neutral-600">
             No Insights Available
           </h3>
-          <p className="text-neutral-500 text-center max-w-md">
+          <p className="text-neutral-500 text-center max-w-2xl">
             Check back later for the latest insights and articles.
           </p>
         </div>

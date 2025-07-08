@@ -195,7 +195,7 @@ export function InsightPageModule() {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center px-8 md:px-20 pb-20 pt-10">
-          <div className="text-center max-w-md">
+          <div className="text-center max-w-2xl">
             <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
               <svg
                 className="w-12 h-12 text-gray-400"
@@ -228,7 +228,7 @@ export function InsightPageModule() {
                 </Button>
               </>
             ) : (
-              <p className="text-neutral-500 text-center max-w-md">
+              <p className="text-neutral-500 text-center max-w-2xl">
                 Check back later for the latest insights and articles.
               </p>
             )}
