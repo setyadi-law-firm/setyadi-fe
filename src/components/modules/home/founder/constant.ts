@@ -8,7 +8,7 @@ export const FOUNDER_DATA = [
     desc: "Chairman at",
   },
   {
-    img_url: "/images/founder-pertamina.svg",
+    img_url: "/images/founder-skk.svg",
     desc: "Former Head of Formalities Division - Chief Legal Counsel at",
   },
   {
@@ -28,7 +28,7 @@ export const FOUNDER_DATA = [
     desc: "Former External Relations Manager at",
   },
   {
-    img_url: "/images/founder-skk.svg",
+    img_url: "/images/founder-pertamina.svg",
     desc: "Audit Committee Member at",
   },
   {
