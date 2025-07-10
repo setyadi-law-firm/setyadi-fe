@@ -13,7 +13,7 @@ export function OurTeamSection() {
     },
     {
       id: 2,
-      name: "Azeem M. Amedi",
+      name: "Azeem M. Amedi, S.H., LL.M.",
       title: "Partner of the D.S. Setyadi & Partners Firm",
       image: Assets.team2,
     },
