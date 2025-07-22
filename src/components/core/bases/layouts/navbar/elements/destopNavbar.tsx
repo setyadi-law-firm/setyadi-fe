@@ -48,7 +48,7 @@ export const DesktopNavbar = () => {
 
   return (
     <nav
-      className={`sticky h-20 w-full flex items-center px-10 py-3 gap-4 justify-between transition-all duration-1000 z-50 -mb-20 overflow-x-clip left-4 right-0 scale-95 rounded-2xl ${
+      className={`sticky h-24 w-full flex items-center px-10 py-3 gap-4 justify-between transition-all duration-1000 z-50 -mb-20 overflow-x-clip left-4 right-0 scale-95 rounded-2xl ${
         isScrolledPastScreenHeight
           ? "top-4 fixed bg-white bg-opacity-0"
           : "-top-36 bg-white bg-opacity-0 translate-y-4"
@@ -57,8 +57,8 @@ export const DesktopNavbar = () => {
       <Image
         src={Assets.logo}
         alt="Logo"
-        width={140}
-        height={140}
+        width={120}
+        height={120}
         className=""
       />
       <div className="flex w-fit items-center relative gap-10">

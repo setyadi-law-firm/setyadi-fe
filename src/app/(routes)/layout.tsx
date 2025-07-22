@@ -43,7 +43,7 @@ export default function RootLayout({
         <LoadingComponent />
       </div>
       <Navbar />
-      <main className="w-full">{children}</main>
+      <main className="w-full -translate-y-4">{children}</main>
       <Footer />
     </div>
   );
