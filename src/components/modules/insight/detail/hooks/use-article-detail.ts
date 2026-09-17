@@ -1,12 +1,10 @@
 import { ENDPOINTS, useSetyadiClient } from "@/components/core";
-import { useSession } from "next-auth/react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { toast } from "sonner";
 import { InsightDetailType } from "../types";
 
 export const useArticleDetail = (article_id: string) => {
   const client = useSetyadiClient();
-  const session = useSession();
   const queryClient = useQueryClient();
 
   const { data, isFetching, error } = useQuery<InsightDetailType, Error>(
@@ -19,7 +17,6 @@ export const useArticleDetail = (article_id: string) => {
 
         return data as InsightDetailType;
       },
-      enabled: !!session.data,
       refetchOnWindowFocus: false,
     }
   );

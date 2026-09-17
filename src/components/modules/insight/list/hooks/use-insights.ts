@@ -1,7 +1,6 @@
 "use client";
 
 import { ENDPOINTS, useSetyadiClient } from "@/components/core";
-import { useSession } from "next-auth/react";
 import { useQuery } from "react-query";
 
 export type ArticleResponseType = {
@@ -16,7 +15,6 @@ export type ArticleResponseType = {
 
 export const useInsights = () => {
   const client = useSetyadiClient();
-  const { data: session } = useSession();
 
   const { data, isLoading, error, refetch } = useQuery<
     ArticleResponseType[],
@@ -26,7 +24,6 @@ export const useInsights = () => {
       const { data } = await client.get(ENDPOINTS.ARTICLE);
       return data as ArticleResponseType[];
     },
-    enabled: !!session,
     refetchOnWindowFocus: false,
   });
 
